@@ -25,6 +25,13 @@ const rotationAnimation = keyframes`
         border-radius:0px;
     }
 `;
+const Emoji = styled.span`
+    font-size: 36px;
+    &:active {
+        opacity: 0;
+    }
+`;
+
 const Box = styled.div`
     display: flex;
     height: 200px;
@@ -35,27 +42,26 @@ const Box = styled.div`
     animation: ${rotationAnimation} 5s linear infinite;
     /* 특정 selector 사용하기 */
     /* targeting */
-    span {
-        font-size: 36px;
-        /* 특정 이벤트 등록 */
-        /* 위에 마우스 올렸을떄 */
+    ${Emoji} {
         &:hover {
             font-size: 72px;
-        }
-        /* 클릭하고 있으면 사라지고 떼면 다시 나타남 */
-        &:active {
-            opacity: 0;
         }
     }
 `;
 
 const App = () => {
     return (
-        <Wrapper>
-            <Box>
-                <span>ggg</span>
-            </Box>
-        </Wrapper>
+        <div>
+            <Wrapper>
+                <Box>
+                    {/* Box안을 단순하게 Emoji로 했다면 as를 사용해쓸시 적용 안됨
+                    하지만 ${tagName} 를 사용한다면 적용 가능 */}
+                    <Emoji as="div">ggg</Emoji>
+                </Box>
+            </Wrapper>
+            {/* Box 밖이므로 hover 적용 안됨 */}
+            <Emoji>sdsd</Emoji>
+        </div>
     );
 };
 
