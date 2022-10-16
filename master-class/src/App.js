@@ -4,21 +4,21 @@ const Father = styled.div`
     display: flex;
 `;
 
-const Btn = styled.button`
+const Input = styled.input.attrs({ required: true, minLength: 10 })`
     background-color: tomato;
-    border: 0;
-    border-radius: 15px;
 `;
 
 const App = () => {
     return (
         <Father as="header">
-            <Btn> Log in </Btn>
-            {/* Btn의 모든 것을 사용하면서 HTML 부분에서는 as 뒤에 정의된 a 태그임 */}
-            {/* 이 부분의 HTML element를 확인해보면 a 태그로 바뀌어 있음*/}
-            <Btn as="a" href="/">
-                Log in
-            </Btn>
+            {/* attrs 함수를 통해 속성값을 자동으로 부여 */}
+            {/* HTML 요소를 확인해보면  */}
+            {/* <input required minlength="10" class="sc-hBxehG eIyleZ"> */}
+            {/* 라고 표시 됨 */}
+            <Input />
+            <Input />
+            <Input />
+            <Input />
         </Father>
     );
 };
