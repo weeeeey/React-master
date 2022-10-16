@@ -1,25 +1,42 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
     display: flex;
 `;
-
-const Input = styled.input.attrs({ required: true, minLength: 10 })`
+const rotationAnimation = keyframes`
+    /* from {
+        transform:rotate(0deg);
+        border-radius:0px;
+    }
+    to {
+        transform:rotate(360deg);
+        border-radius:100px;
+    } */
+    0%{
+        transform:rotate(0deg);
+        border-radius:0px;
+    }
+    50%{
+        transform:rotate(360deg);
+        border-radius:100px;
+    }
+    100%{
+        transform:rotate(0deg);
+        border-radius:0px;
+    }
+`;
+const Box = styled.div`
+    height: 200px;
+    width: 200px;
     background-color: tomato;
+    animation: ${rotationAnimation} 1s linear infinite;
 `;
 
 const App = () => {
     return (
-        <Father as="header">
-            {/* attrs 함수를 통해 속성값을 자동으로 부여 */}
-            {/* HTML 요소를 확인해보면  */}
-            {/* <input required minlength="10" class="sc-hBxehG eIyleZ"> */}
-            {/* 라고 표시 됨 */}
-            <Input />
-            <Input />
-            <Input />
-            <Input />
-        </Father>
+        <Wrapper>
+            <Box />
+        </Wrapper>
     );
 };
 
