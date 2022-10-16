@@ -26,16 +26,35 @@ const rotationAnimation = keyframes`
     }
 `;
 const Box = styled.div`
+    display: flex;
     height: 200px;
     width: 200px;
     background-color: tomato;
-    animation: ${rotationAnimation} 1s linear infinite;
+    justify-content: center;
+    align-items: center;
+    animation: ${rotationAnimation} 5s linear infinite;
+    /* 특정 selector 사용하기 */
+    /* targeting */
+    span {
+        font-size: 36px;
+        /* 특정 이벤트 등록 */
+        /* 위에 마우스 올렸을떄 */
+        &:hover {
+            font-size: 72px;
+        }
+        /* 클릭하고 있으면 사라지고 떼면 다시 나타남 */
+        &:active {
+            opacity: 0;
+        }
+    }
 `;
 
 const App = () => {
     return (
         <Wrapper>
-            <Box />
+            <Box>
+                <span>ggg</span>
+            </Box>
         </Wrapper>
     );
 };
