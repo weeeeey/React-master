@@ -4,19 +4,21 @@ const Father = styled.div`
     display: flex;
 `;
 const Box = styled.div`
-    background-color: teal;
+    /* props 있으면 자동으로 클래스 네임 생성  */
+    background-color: ${(props) => props.bgColor};
     width: 100px;
     height: 100px;
-    &.Son {
-        background-color: red;
-    }
+`;
+// 다른 태그의 속성을 모두 가져오면서 속성 추가해주는 방법
+// extending
+const Circle = styled(Box)`
+    border-radius: 50px;
 `;
 const App = () => {
     return (
         <Father>
-            <Box className="Son"></Box>
-            <Box></Box>
-            <Box style={{ background: "blue" }}></Box>
+            <Box bgColor="teal"></Box>
+            <Circle bgColor="tomato"></Circle>
         </Father>
     );
 };
