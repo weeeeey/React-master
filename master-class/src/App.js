@@ -3,22 +3,22 @@ import styled from "styled-components";
 const Father = styled.div`
     display: flex;
 `;
-const Box = styled.div`
-    /* props 있으면 자동으로 클래스 네임 생성  */
-    background-color: ${(props) => props.bgColor};
-    width: 100px;
-    height: 100px;
+
+const Btn = styled.button`
+    background-color: tomato;
+    border: 0;
+    border-radius: 15px;
 `;
-// 다른 태그의 속성을 모두 가져오면서 속성 추가해주는 방법
-// extending
-const Circle = styled(Box)`
-    border-radius: 50px;
-`;
+
 const App = () => {
     return (
-        <Father>
-            <Box bgColor="teal"></Box>
-            <Circle bgColor="tomato"></Circle>
+        <Father as="header">
+            <Btn> Log in </Btn>
+            {/* Btn의 모든 것을 사용하면서 HTML 부분에서는 as 뒤에 정의된 a 태그임 */}
+            {/* 이 부분의 HTML element를 확인해보면 a 태그로 바뀌어 있음*/}
+            <Btn as="a" href="/">
+                Log in
+            </Btn>
         </Father>
     );
 };
