@@ -1,7 +1,10 @@
 import { DefaultTheme } from "styled-components";
 
 export const theme: DefaultTheme = {
-    bgColor: "black",
-    textColor: "white",
-    btnColor: "tomato",
+    bgColor: "#2f3640",
+    textColor: "#f5f6fa",
+    accentColor: "#44bd32",
 };
+
+// Flat UI Color
+// https://flatuicolors.com/palette/gb
