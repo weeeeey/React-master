@@ -1,26 +1,35 @@
 import styled from "styled-components";
 
-// interface란 object shape을 타입 스크립트에게 설명해주는
-// 타입스크립트의 개념
 interface CircleProps {
     bgColor: string;
+    borderColor?: string;
+    text?: string;
 }
-
-const Container = styled.div<CircleProps>`
+interface ContainerProps {
+    bgColor: string;
+    borderColor: string;
+}
+const Container = styled.div<ContainerProps>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 200px;
     height: 200px;
     background-color: ${(props) => props.bgColor};
     border-radius: 100px;
+    border: 10px solid ${(props) => props.borderColor};
 `;
 
-const Circle = ({ bgColor }: CircleProps) => {
-    return <Container bgColor={bgColor} />;
+const Circle = ({
+    bgColor,
+    borderColor,
+    text = "default text",
+}: CircleProps) => {
+    return (
+        <Container borderColor={borderColor ?? bgColor} bgColor={bgColor}>
+            {text}
+        </Container>
+    );
 };
-// interface PlayerShape {
-//     name: string;
-//     age: number;
-// }
-// const sayHello = (playerobj: PlayerShape) =>
-//     `Hello ${playerobj.name} you are ${playerobj.age}`;
 
 export default Circle;
