@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 
 const Countainer = styled.div`
     padding: 0px 20px;
+    max-width: 480px;
+    margin: 0 auto;
 `;
 const Header = styled.header`
     height: 15vh;
@@ -26,56 +29,61 @@ const Coin = styled.li`
         }
     }
 `;
+const Loader = styled.span`
+    text-align: center;
+    display: block;
+`;
 
+interface CoinInterface {
+    id: string;
+    name: string;
+    symbol: string;
+    ranck: number;
+    is_new: boolean;
+    is_active: boolean;
+    type: string;
+}
 const Title = styled.h1`
     font-size: 48px;
     color: ${(props) => props.theme.accentColor};
 `;
 
-const coins = [
-    {
-        id: "btc-bitcoin",
-        name: "Bitcoin",
-        symbol: "BTC",
-        rank: 1,
-        is_new: false,
-        is_active: true,
-        type: "coin",
-    },
-    {
-        id: "eth-ethereum",
-        name: "Ethereum",
-        symbol: "ETH",
-        rank: 2,
-        is_new: false,
-        is_active: true,
-        type: "coin",
-    },
-    {
-        id: "hex-hex",
-        name: "HEX",
-        symbol: "HEX",
-        rank: 3,
-        is_new: false,
-        is_active: true,
-        type: "token",
-    },
-];
-
 const Coins = () => {
+    // 받아올 정보들에 대해 인터페이스로 미리 알려줌
+    // 그것들이 배열이면 타입 지정해주면서 [] 붙여야함
+    const [coins, setCoins] = useState<CoinInterface[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // ()() 라고 써놓으면 바로 실행 가능한 함수가 됨
+        (async () => {
+            const response = await fetch(
+                "https://api.coinpaprika.com/v1/coins"
+            );
+            const json = await response.json();
+            setCoins(json.slice(0, 100));
+            // 코인 정보 100개만 가져오기
+            setLoading(false);
+        })();
+    }, []);
+
     return (
         <Countainer>
             <Header>
                 <Title>코인</Title>
             </Header>
-            <CoinsList>
-                {coins.map((coin) => (
-                    <Coin key={coin.id}>
-                        {/* rarr 은 라이트 애로우를 띄워줌 */}
-                        <Link to={`/${coin.id}`}>{coin.name}&rarr;</Link>
-                    </Coin>
-                ))}
-            </CoinsList>
+            {loading ? (
+                <Loader>Loading...</Loader>
+            ) : (
+                <CoinsList>
+                    {coins.map((coin) => (
+                        <Coin key={coin.id}>
+                            {/* rarr 은 라이트 애로우를 띄워줌 */}
+                            <Link to={`/${coin.id}`}>{coin.name}&rarr;</Link>
+                        </Coin>
+                    ))}
+                </CoinsList>
+            )}
         </Countainer>
     );
 };
