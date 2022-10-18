@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -30,7 +30,22 @@ const Coin = () => {
     const [loading, setLoading] = useState(true);
     const { coinId } = useParams();
     const { state } = useLocation() as RouteState;
-    console.log(state.name);
+    const [info, setInfo] = useState({});
+    // 현재 info와 priceInfo는 타입을 지정 안해줘서 name이나 Id에 접근하면 에러 뜸
+    const [priceInfo, setPriceInfo] = useState({});
+    useEffect(() => {
+        (async () => {
+            const infoData = await (
+                await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+            ).json();
+            const priceData = await (
+                await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+            ).json();
+            setInfo(infoData);
+            setPriceInfo(priceData);
+            console.log(info);
+        })();
+    }, []);
     return (
         <Container>
             <Header>
