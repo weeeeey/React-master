@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
 const Countainer = styled.div`
     padding: 0px 20px;
@@ -63,7 +63,7 @@ const Coins = () => {
         // ()() 라고 써놓으면 바로 실행 가능한 함수가 됨
         (async () => {
             const response = await fetch(
-                "https://api.coinpaprika.com/v1/coins"
+                'https://api.coinpaprika.com/v1/coins'
             );
             const json = await response.json();
             setCoins(json.slice(0, 100));

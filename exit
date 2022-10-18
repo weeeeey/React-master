@@ -1,0 +1,154 @@
+[33mcommit 42db68142e3982cb02ecde3017f0a8bdd4307def[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 56528f5 01e89f1
+Author: weeeeey <qser155@naver.com>
+Date:   Tue Oct 18 17:02:42 2022 +0900
+
+    ㅁㄴ
+
+[33mcommit 56528f5b9f6e65a63acb9dd072211ec26df22767[m
+Author: weeeeey <qser155@naver.com>
+Date:   Tue Oct 18 16:46:08 2022 +0900
+
+    #4 Crypto: Router Parameter && useLocation/useParams
+    
+    Router Parameter: <Link to:{path} state:{parameter}/>
+    
+    useLocation: const {state} = useLoction() as RouteState(인터페이스명)
+
+[33mcommit 01e89f16a133ddd289dcfa35986ed5b0566bff89[m
+Author: weeeeey <qser155@naver.com>
+Date:   Tue Oct 18 11:04:11 2022 +0900
+
+    # 데스크탑 세팅
+
+[33mcommit 7dc7d1653903ec6f14afb08dd369442a344cc722[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 19:18:51 2022 +0900
+
+    #4 Crypto: fetch API && useState<CoinInterfaces[]>([])
+
+[33mcommit 7cc8c5454a96853bd77cf157e4b51de0772a4cef[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 18:28:10 2022 +0900
+
+    #Crypto: css styling && CoinList array coin && Link
+
+[33mcommit 2f4c860af3d65add3dedf057216e22a6aeb33a97[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 17:58:52 2022 +0900
+
+    #4 Crypto: 전역 스타일 설정 createGlobalStyle
+
+[33mcommit 631ad8f061e73953307527a5af5bcd26735756d1[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 16:01:05 2022 +0900
+
+    #4 Crypto: Router/Default setting
+
+[33mcommit a74e252bf162a8dc06e2fa5f0d4fcea603a5957d[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 14:01:32 2022 +0900
+
+    #3 TypeScript- Theme: Default Theme
+
+[33mcommit 1f0b799ff6c7ac8d5f07606032119a79991af7d9[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 13:27:33 2022 +0900
+
+    #TypeScript- Form setting && Handling Event By TS
+    
+    event: React.FormEvent<HTML(Input//Form...)Element>
+
+[33mcommit 38427033c3071390f67db73665d11835a3a5ec03[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 13:01:16 2022 +0900
+
+    #3 TypeScript- useState data type setting
+
+[33mcommit 2dbb51062c2477eafb029564c9f3436a8e1e3f7c[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 12:43:37 2022 +0900
+
+    #TypeScript - unrequired props // default value
+
+[33mcommit be097fb97b596cdf1dad29a83fea07114969a52c[m
+Author: weeeeey <qser155@naver.com>
+Date:   Mon Oct 17 12:26:35 2022 +0900
+
+    # TypeScript - parameter object type
+
+[33mcommit 7c8f93e67981ebaf99e4c97588a33fb4b1794188[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 17:48:21 2022 +0900
+
+    #3 TypeScript install
+
+[33mcommit 1eaaacfd7e68c450857feea7a5458eeda97a3149[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 16:40:37 2022 +0900
+
+    #2 style-components ThemeProvider를 통한 darkMode,lightMode
+
+[33mcommit fb5911d3a8dbfeab80ea6a4b250f52fd86347abc[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 15:02:34 2022 +0900
+
+    #2 styled-components 태그(b) 밖에서 선언한 태그(a)를 b안에 동적 태그로 설정
+
+[33mcommit f4276f30225e750871c21bed20a2ca6b0296535a[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 14:49:34 2022 +0900
+
+    #2 styled-components 특정 selector 지정 및 이벤트 처리
+    
+    해당 태그 안에 선언&&
+    :이벤트 {
+       변화값 설정
+    }
+
+[33mcommit d31f8b589ac7ca16c1070f30e5f50e3112db5782[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 14:40:20 2022 +0900
+
+    #2 styled-components animation element
+
+[33mcommit ffb9ba727ffdfba47f97f2d9637f0fa1e0a818c1[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 14:32:20 2022 +0900
+
+    #2 styledComponents - attrs 로 속성값 자동 부여
+
+[33mcommit 2eb0ba885611a4c1edf10bba3f51ea11ce36c1db[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 14:15:09 2022 +0900
+
+    #2 styled Component- as를 이용한 HTML에서 다른 태그로 변환
+
+[33mcommit 9c12a1cd47bf5da31f7186b81412ef42a4ff2214[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 14:06:47 2022 +0900
+
+    #2 styled Components - props && extending
+    
+    ${props=>props.bgColor}
+    const Son = styled(Father)
+
+[33mcommit c0b91f4bf4ffb26b85d5f4b749f0c7ddb660b93e[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sun Oct 16 13:57:29 2022 +0900
+
+    #2 styled-components className
+
+[33mcommit 971de67002a9720a62eafea24b3ac6ea8099bba9[m
+Author: weeeeey <qser155@naver.com>
+Date:   Sat Oct 15 22:33:34 2022 +0900
+
+    # styled components start
+    
+    yarn add styled-components
+
+[33mcommit cc468c7a55ae95829ff4a9d74f46136f8e5ed54c[m
+Author: weeeeey <96678855+weeeeey@users.noreply.github.com>
+Date:   Sat Oct 15 22:10:17 2022 +0900
+
+    Initial commit
