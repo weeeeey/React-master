@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
-=======
-import { useParams } from 'react-router-dom';
->>>>>>> refs/remotes/origin/main
 
 const Title = styled.h1`
     font-size: 48px;
@@ -27,9 +23,6 @@ const Header = styled.header`
     align-items: center;
 `;
 
-interface RouteParams {
-    coinId: string;
-}
 interface RouteState {
     state: { name: string };
 }
