@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useLocation, useParams } from "react-router-dom";
-import styled from "styled-components";
-import Chart from "./Chart";
-import Price from "./Price";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import Chart from './Chart';
+import Price from './Price';
 
 const Title = styled.h1`
     font-size: 48px;
@@ -45,6 +46,13 @@ const OverviewItem = styled.div`
 `;
 const Description = styled.p`
     margin: 20px 0px;
+`;
+
+const Taps = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 25px 0px;
+    gap: 10px;
 `;
 
 interface RouteState {
@@ -154,7 +162,7 @@ const Coin = () => {
                     {state?.name
                         ? state.name
                         : loading
-                        ? "Loading.."
+                        ? 'Loading..'
                         : info?.name}
                 </Title>
             </Header>
@@ -173,7 +181,7 @@ const Coin = () => {
                         </OverviewItem>
                         <OverviewItem>
                             <span>Open Source:</span>
-                            <span>{info?.open_source ? "Yes" : "No"}</span>
+                            <span>{info?.open_source ? 'Yes' : 'No'}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{info?.description}</Description>
@@ -187,6 +195,12 @@ const Coin = () => {
                             <span>{priceInfo?.max_supply}</span>
                         </OverviewItem>
                     </Overview>
+
+                    <Taps>
+                        <Link to={`/${coinId}/chart`}>Chart</Link>
+                        <Link to={`/${coinId}/price`}>Price</Link>
+                    </Taps>
+
                     <Routes>
                         {/* Nested Router */}
                         {/* 위에 정보들을 그대로 두고 바로 아래에 불러오는 것 */}
