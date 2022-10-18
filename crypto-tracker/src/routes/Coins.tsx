@@ -19,9 +19,10 @@ const Coin = styled.li`
     color: ${(props) => props.theme.bgColor};
     margin-bottom: 10px;
     a {
+        display: flex;
+        align-items: center;
         padding: 20px;
         transition: color 0.2s ease-in;
-        display: block;
     }
     &:hover {
         a {
@@ -33,6 +34,15 @@ const Loader = styled.span`
     text-align: center;
     display: block;
 `;
+const Img = styled.img`
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+`;
+const Title = styled.h1`
+    font-size: 48px;
+    color: ${(props) => props.theme.accentColor};
+`;
 
 interface CoinInterface {
     id: string;
@@ -43,11 +53,6 @@ interface CoinInterface {
     is_active: boolean;
     type: string;
 }
-const Title = styled.h1`
-    font-size: 48px;
-    color: ${(props) => props.theme.accentColor};
-`;
-
 const Coins = () => {
     // 받아올 정보들에 대해 인터페이스로 미리 알려줌
     // 그것들이 배열이면 타입 지정해주면서 [] 붙여야함
@@ -78,8 +83,17 @@ const Coins = () => {
                 <CoinsList>
                     {coins.map((coin) => (
                         <Coin key={coin.id}>
-                            {/* rarr 은 라이트 애로우를 띄워줌 */}
-                            <Link to={`/${coin.id}`}>{coin.name}&rarr;</Link>
+                            {/* < Link to="/home" state={state} / > */}
+                            <Link
+                                to={`/${coin.id}`}
+                                //  이미 coin에 대한 정보를 갖고 있으므로 파라미터를 통해 라우터 통신을 하면됨
+                                state={{ name: `${coin.name}` }}
+                            >
+                                <Img
+                                    src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
+                                />
+                                {coin.name}&rarr;
+                            </Link>
                         </Coin>
                     ))}
                 </CoinsList>
