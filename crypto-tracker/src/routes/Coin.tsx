@@ -190,9 +190,11 @@ const Coin = () => {
                     <Routes>
                         {/* Nested Router */}
                         {/* 위에 정보들을 그대로 두고 바로 아래에 불러오는 것 */}
+                        {/* <Route path="/:coinId/*" element={<Coin />}></Route> */}
+                        {/* Router.tsx 에 위 문장을 써줌으로써 중첩된 자식 루트 있다고 명시해줌 */}
                         {/* 상대경로 입력 */}
                         <Route path={`/price`} element={<Price />} />
-                        <Route path="/chart" element={<Chart />} />
+                        <Route path="chart" element={<Chart />} />
                     </Routes>
                 </>
             )}
