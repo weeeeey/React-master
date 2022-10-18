@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 const Title = styled.h1`
     font-size: 48px;
@@ -21,6 +23,28 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const Overview = styled.div`
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+`;
+const OverviewItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span:first-child {
+        font-size: 10px;
+        font-weight: 400;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+`;
+const Description = styled.p`
+    margin: 20px 0px;
 `;
 
 interface RouteState {
@@ -102,7 +126,7 @@ const Coin = () => {
     // 타입스크립트는 이제 타입들을 다 아니까 () 안에 {}은 지워줌
 
     const [info, setInfo] = useState<IInfoData>();
-    const [priceInfo, setPriceInfo] = useState();
+    const [priceInfo, setPriceInfo] = useState<IPriceData>();
 
     useEffect(() => {
         (async () => {
@@ -114,6 +138,7 @@ const Coin = () => {
             ).json();
             setInfo(infoData);
             setPriceInfo(priceData);
+            setLoading(false);
             // [인터페이스를 빠르게 정의 하는 팀]
             // console.log(info); 를 찍어서 콘솔 창에 띄움
             // 띄워진 정보 위에 마우스 우클릭 후 store object as global variable 을 누름
@@ -121,13 +146,56 @@ const Coin = () => {
             // Object.keys(temp1).join() 입력
             // 이걸 토대로 인터페이스 작성
         })();
-    }, []);
+    }, [coinId]);
     return (
         <Container>
             <Header>
-                <Title>{state?.name || "Loading..."}</Title>
+                <Title>
+                    {state?.name
+                        ? state.name
+                        : loading
+                        ? "Loading.."
+                        : info?.name}
+                </Title>
             </Header>
-            {loading ? <Loader>Loading</Loader> : null}
+            {loading ? (
+                <Loader>Loading</Loader>
+            ) : (
+                <>
+                    <Overview>
+                        <OverviewItem>
+                            <span>Rank:</span>
+                            <span>{info?.rank}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>Symbol:</span>
+                            <span>${info?.symbol}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>Open Source:</span>
+                            <span>{info?.open_source ? "Yes" : "No"}</span>
+                        </OverviewItem>
+                    </Overview>
+                    <Description>{info?.description}</Description>
+                    <Overview>
+                        <OverviewItem>
+                            <span>Total Suply:</span>
+                            <span>{priceInfo?.total_supply}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>Max Supply:</span>
+                            <span>{priceInfo?.max_supply}</span>
+                        </OverviewItem>
+                    </Overview>
+                    <Routes>
+                        {/* Nested Router */}
+                        {/* 위에 정보들을 그대로 두고 바로 아래에 불러오는 것 */}
+                        {/* 상대경로 입력 */}
+                        <Route path={`/price`} element={<Price />} />
+                        <Route path="/chart" element={<Chart />} />
+                    </Routes>
+                </>
+            )}
         </Container>
     );
 };
