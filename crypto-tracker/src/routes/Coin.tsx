@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Route, Routes, useLocation, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import Chart from './Chart';
-import Price from './Price';
+import { useEffect, useState } from "react";
+import { Link, useMatch } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
+import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 const Title = styled.h1`
     font-size: 48px;
@@ -53,6 +53,21 @@ const Taps = styled.div`
     grid-template-columns: repeat(2, 1fr);
     margin: 25px 0px;
     gap: 10px;
+`;
+
+const Tap = styled.span<{ isActive: boolean }>`
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 7px 0px;
+    border-radius: 10px;
+    color: ${(props) =>
+        props.isActive ? props.theme.accentColor : props.theme.textColor};
+    a {
+        display: block;
+    }
 `;
 
 interface RouteState {
@@ -136,6 +151,10 @@ const Coin = () => {
     const [info, setInfo] = useState<IInfoData>();
     const [priceInfo, setPriceInfo] = useState<IPriceData>();
 
+    // useMatch 는 내가 특정한 URL에 있는지의 여부를 알려줌
+    // 해당 URL이 아니라면 null을 반환함
+    const priceMatch = useMatch("/:coinId/price");
+    const chartMatch = useMatch("/:coinId/chart");
     useEffect(() => {
         (async () => {
             const infoData = await (
@@ -162,7 +181,7 @@ const Coin = () => {
                     {state?.name
                         ? state.name
                         : loading
-                        ? 'Loading..'
+                        ? "Loading.."
                         : info?.name}
                 </Title>
             </Header>
@@ -181,7 +200,7 @@ const Coin = () => {
                         </OverviewItem>
                         <OverviewItem>
                             <span>Open Source:</span>
-                            <span>{info?.open_source ? 'Yes' : 'No'}</span>
+                            <span>{info?.open_source ? "Yes" : "No"}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{info?.description}</Description>
@@ -197,8 +216,12 @@ const Coin = () => {
                     </Overview>
 
                     <Taps>
-                        <Link to={`/${coinId}/chart`}>Chart</Link>
-                        <Link to={`/${coinId}/price`}>Price</Link>
+                        <Tap isActive={chartMatch !== null}>
+                            <Link to={`/${coinId}/chart`}>Chart</Link>
+                        </Tap>
+                        <Tap isActive={priceMatch !== null}>
+                            <Link to={`/${coinId}/price`}>Price</Link>
+                        </Tap>
                     </Taps>
 
                     <Routes>
