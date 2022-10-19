@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { fetcher } from "./../api";
+import { useQuery } from "react-query";
 
 const Countainer = styled.div`
     padding: 0px 20px;
@@ -44,7 +45,7 @@ const Title = styled.h1`
     color: ${(props) => props.theme.accentColor};
 `;
 
-interface CoinInterface {
+interface ICoin {
     id: string;
     name: string;
     symbol: string;
@@ -54,39 +55,32 @@ interface CoinInterface {
     type: string;
 }
 const Coins = () => {
-    // 받아올 정보들에 대해 인터페이스로 미리 알려줌
-    // 그것들이 배열이면 타입 지정해주면서 [] 붙여야함
-    const [coins, setCoins] = useState<CoinInterface[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetcher);
+    // react-query 사용시 index.tsx에서 쿼리 클라이언트 설치(설정) 해줘야함
 
-    useEffect(() => {
-        // ()() 라고 써놓으면 바로 실행 가능한 함수가 됨
-        (async () => {
-            const response = await fetch(
-                'https://api.coinpaprika.com/v1/coins'
-            );
-            const json = await response.json();
-            setCoins(json.slice(0, 100));
-            // 코인 정보 100개만 가져오기
-            setLoading(false);
-        })();
-    }, []);
+    // useQuery를 사용하면 isLoading(boolean)과 data를 받아올 수 있음
+    // data는 지정한 인터페이스 데이터 타입 또는 undefind를 받아오므로 사용할떄는 ? 붙여주기
+    // data는 코인 배열을 받아오므로 ICoin[] 해주기
+
+    // useQuery 첫번쨰 인자로는 쿼리의 key값 , 두번째 인자는 fetch 함수
+
+    // react query가 데이터를 캐시에 저장해둬서 뒤로 가기를 눌러도 Loading 문구가 안보인다
 
     return (
         <Countainer>
             <Header>
                 <Title>코인</Title>
             </Header>
-            {loading ? (
+            {isLoading ? (
                 <Loader>Loading...</Loader>
             ) : (
                 <CoinsList>
-                    {coins.map((coin) => (
+                    {/* data중 100개 까지만 받는걸 여기에서 지정함 */}
+                    {data?.slice(0, 100).map((coin) => (
                         <Coin key={coin.id}>
                             {/* < Link to="/home" state={state} / > */}
                             <Link
                                 to={`/${coin.id}`}
-                                //  이미 coin에 대한 정보를 갖고 있으므로 파라미터를 통해 라우터 통신을 하면됨
                                 state={{ name: `${coin.name}` }}
                             >
                                 <Img

@@ -9,7 +9,6 @@ const Title = styled.h1`
     font-size: 48px;
     color: ${(props) => props.theme.accentColor};
 `;
-
 const Loader = styled.span`
     text-align: center;
     display: block;
@@ -25,7 +24,6 @@ const Header = styled.header`
     justify-content: center;
     align-items: center;
 `;
-
 const Overview = styled.div`
     display: flex;
     justify-content: space-between;
@@ -47,14 +45,12 @@ const OverviewItem = styled.div`
 const Description = styled.p`
     margin: 20px 0px;
 `;
-
 const Taps = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     margin: 25px 0px;
     gap: 10px;
 `;
-
 const Tap = styled.span<{ isActive: boolean }>`
     text-align: center;
     text-transform: uppercase;
@@ -69,20 +65,9 @@ const Tap = styled.span<{ isActive: boolean }>`
         display: block;
     }
 `;
-
 interface RouteState {
     state: { name: string };
 }
-
-// interface 명 작성시 맨 앞에 대문자 I 를 입력함 (보통)
-// Object.keys(temp1).join() 입력
-// 복붙해 와서 콤마를 드래그 후 ctrl+d 를 누르며 한개씩 선택 후 백스페이스 후 엔터
-// 이후 전체 드래그 후 Alt shift i 로 선택 후 : 와 ; 입력
-// Object.values(temp1).map(v=>typeof v).join() 입력으로 타입 받아오기
-// ctrl+ d로 콤마 제거후 복붙 (알트 쉬프트 i 이용)
-// object 타입은 따로 또 인터페이스 만들어서 정보 알려줘야함
-// 딱히 필요 없으니 삭제
-
 interface IInfoData {
     id: string;
     name: string;
@@ -104,7 +89,6 @@ interface IInfoData {
     first_data_at: string;
     last_data_at: string;
 }
-
 interface IPriceData {
     id: string;
     name: string;
@@ -141,18 +125,14 @@ interface IPriceData {
 }
 
 const Coin = () => {
-    const [loading, setLoading] = useState(true);
     const { coinId } = useParams();
     const { state } = useLocation() as RouteState;
 
-    // 현재 info와 priceInfo는 타입을 지정 안해줘서 name이나 Id에 접근하면 에러 뜸
-    // 타입스크립트는 이제 타입들을 다 아니까 () 안에 {}은 지워줌
+    const [loading, setLoading] = useState(true);
 
     const [info, setInfo] = useState<IInfoData>();
     const [priceInfo, setPriceInfo] = useState<IPriceData>();
 
-    // useMatch 는 내가 특정한 URL에 있는지의 여부를 알려줌
-    // 해당 URL이 아니라면 null을 반환함
     const priceMatch = useMatch("/:coinId/price");
     const chartMatch = useMatch("/:coinId/chart");
     useEffect(() => {
