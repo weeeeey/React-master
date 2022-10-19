@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { fetchInfo, fetchPrice } from "../api";
 import { Link, useMatch } from "react-router-dom";
 import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -128,32 +129,20 @@ const Coin = () => {
     const { coinId } = useParams();
     const { state } = useLocation() as RouteState;
 
-    const [loading, setLoading] = useState(true);
-
-    const [info, setInfo] = useState<IInfoData>();
-    const [priceInfo, setPriceInfo] = useState<IPriceData>();
-
     const priceMatch = useMatch("/:coinId/price");
     const chartMatch = useMatch("/:coinId/chart");
-    useEffect(() => {
-        (async () => {
-            const infoData = await (
-                await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-            ).json();
-            const priceData = await (
-                await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-            ).json();
-            setInfo(infoData);
-            setPriceInfo(priceData);
-            setLoading(false);
-            // [인터페이스를 빠르게 정의 하는 팀]
-            // console.log(info); 를 찍어서 콘솔 창에 띄움
-            // 띄워진 정보 위에 마우스 우클릭 후 store object as global variable 을 누름
-            // 바로 temp에 저장 됨
-            // Object.keys(temp1).join() 입력
-            // 이걸 토대로 인터페이스 작성
-        })();
-    }, [coinId]);
+
+    const { isLoading: isInfoLoading, data: infoData } = useQuery<IInfoData>(
+        ["info", coinId],
+        () => fetchInfo(coinId)
+        // 두번쨰 인자는 함수 형태로 넘겨야 하는데 단순히 fetchInfo(id)를 하면
+        // 그 자리에서 함수를 바로 실행하는 것이므로 화살표 함수 이용
+    );
+    const { isLoading: isPriceLoading, data: priceData } = useQuery<IPriceData>(
+        ["price", coinId],
+        () => fetchPrice(coinId)
+    );
+    const loading = isInfoLoading || isPriceLoading;
     return (
         <Container>
             <Header>
@@ -162,7 +151,7 @@ const Coin = () => {
                         ? state.name
                         : loading
                         ? "Loading.."
-                        : info?.name}
+                        : infoData?.name}
                 </Title>
             </Header>
             {loading ? (
@@ -172,26 +161,26 @@ const Coin = () => {
                     <Overview>
                         <OverviewItem>
                             <span>Rank:</span>
-                            <span>{info?.rank}</span>
+                            <span>{infoData?.rank}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>Symbol:</span>
-                            <span>${info?.symbol}</span>
+                            <span>${infoData?.symbol}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>Open Source:</span>
-                            <span>{info?.open_source ? "Yes" : "No"}</span>
+                            <span>{infoData?.open_source ? "Yes" : "No"}</span>
                         </OverviewItem>
                     </Overview>
-                    <Description>{info?.description}</Description>
+                    <Description>{infoData?.description}</Description>
                     <Overview>
                         <OverviewItem>
                             <span>Total Suply:</span>
-                            <span>{priceInfo?.total_supply}</span>
+                            <span>{priceData?.total_supply}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>Max Supply:</span>
-                            <span>{priceInfo?.max_supply}</span>
+                            <span>{priceData?.max_supply}</span>
                         </OverviewItem>
                     </Overview>
 

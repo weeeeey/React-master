@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetcher } from "./../api";
+import { fetchCoins } from "./../api";
 import { useQuery } from "react-query";
 
 const Countainer = styled.div`
@@ -55,14 +55,14 @@ interface ICoin {
     type: string;
 }
 const Coins = () => {
-    const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetcher);
+    const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
     // react-query 사용시 index.tsx에서 쿼리 클라이언트 설치(설정) 해줘야함
 
     // useQuery를 사용하면 isLoading(boolean)과 data를 받아올 수 있음
     // data는 지정한 인터페이스 데이터 타입 또는 undefind를 받아오므로 사용할떄는 ? 붙여주기
     // data는 코인 배열을 받아오므로 ICoin[] 해주기
 
-    // useQuery 첫번쨰 인자로는 쿼리의 key값 , 두번째 인자는 fetch 함수
+    // useQuery 첫번쨰 인자로는 쿼리의 key값(해당 쿼리의 이름) , 두번째 인자는 fetch 함수
 
     // react query가 데이터를 캐시에 저장해둬서 뒤로 가기를 눌러도 Loading 문구가 안보인다
 
