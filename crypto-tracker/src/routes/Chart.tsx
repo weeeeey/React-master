@@ -42,7 +42,7 @@ const Chart = ({ coinId }: IcoinId) => {
                             height: 300,
                             width: 500,
                             toolbar: {
-                                show: false,
+                                show: true,
                             },
                             background: "transparent",
                         },
@@ -58,6 +58,26 @@ const Chart = ({ coinId }: IcoinId) => {
                             axisBorder: { show: false },
                             axisTicks: { show: false },
                             labels: { show: false },
+                            type: "datetime",
+                            categories: data?.map((price) =>
+                                new Date(price.time_close * 1000).toUTCString()
+                            ),
+                        },
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                gradientToColors: ["blue"],
+                                stops: [0, 100],
+                            },
+                        },
+                        colors: ["#0fbcf9"],
+                        tooltip: {
+                            y: {
+                                formatter: (v) => `$${v.toFixed(2)}`,
+                            },
+                            x: {
+                                show: true,
+                            },
                         },
                     }}
                 />

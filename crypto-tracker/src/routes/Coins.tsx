@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "./../api";
 import { useQuery } from "react-query";
-
+import { Helmet } from "react-helmet";
 const Countainer = styled.div`
     padding: 0px 20px;
     max-width: 480px;
@@ -68,6 +68,9 @@ const Coins = () => {
 
     return (
         <Countainer>
+            <Helmet>
+                <title>Coins</title>
+            </Helmet>
             <Header>
                 <Title>코인</Title>
             </Header>

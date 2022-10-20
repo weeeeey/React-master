@@ -5,7 +5,8 @@ import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
-
+import { Helmet } from "react-helmet";
+// Helmet 을 통해 html head 부분에 접근 가능해짐
 const Title = styled.h1`
     font-size: 48px;
     color: ${(props) => props.theme.accentColor};
@@ -140,11 +141,21 @@ const Coin = () => {
     );
     const { isLoading: isPriceLoading, data: priceData } = useQuery<IPriceData>(
         ["price", coinId],
-        () => fetchPrice(coinId)
+        () => fetchPrice(coinId),
+        { refetchInterval: 3000 }
     );
     const loading = isInfoLoading || isPriceLoading;
     return (
         <Container>
+            <Helmet>
+                <title>
+                    {state?.name
+                        ? state.name
+                        : loading
+                        ? "Loading"
+                        : infoData?.name}
+                </title>
+            </Helmet>
             <Header>
                 <Title>
                     {state?.name
@@ -168,8 +179,10 @@ const Coin = () => {
                             <span>${infoData?.symbol}</span>
                         </OverviewItem>
                         <OverviewItem>
-                            <span>Open Source:</span>
-                            <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                            <span>Price:</span>
+                            <span>
+                                ${priceData?.quotes.USD.price.toFixed(3)}
+                            </span>
                         </OverviewItem>
                     </Overview>
                     <Description>{infoData?.description}</Description>
