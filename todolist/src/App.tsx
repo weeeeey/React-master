@@ -1,12 +1,8 @@
-import Router from "./routes/Router";
 import { createGlobalStyle } from "styled-components";
-import { IsDarkAtom } from "./atom";
-import { ThemeProvider } from "styled-components";
-import { darkTheme, lightTheme } from "./theme";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import TodoList from "./components/TodoList";
 
 const GlobalStyle = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -58,31 +54,24 @@ table {
   box-sizing: border-box;
 }
 body {
-  font-weight:300;
+  font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   background-color:${(props) => props.theme.bgColor};
   color:${(props) => props.theme.textColor};
-  line-height:1.2;
-  
+  line-height: 1.2;
 }
 a {
   text-decoration:none;
-  color: inherit;
+  color:inherit;
 }
 `;
 
 const App = () => {
-    const isDark = useRecoilValue(IsDarkAtom);
-    const setThemeAtom = useSetRecoilState(IsDarkAtom);
-    const toggleMode = () => setThemeAtom((prev) => !prev);
     return (
-        <>
-            <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-                <GlobalStyle />
-                <button onClick={toggleMode}>Toggle Mode</button>
-                <Router />
-            </ThemeProvider>
-        </>
+        <div>
+            <GlobalStyle />
+            <TodoList />
+        </div>
     );
 };
 

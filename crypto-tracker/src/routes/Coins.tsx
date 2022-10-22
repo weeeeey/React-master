@@ -13,11 +13,12 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 `;
 const CoinsList = styled.ul``;
 const Coin = styled.li`
     background-color: white;
-    color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
     margin-bottom: 10px;
     a {
         display: flex;

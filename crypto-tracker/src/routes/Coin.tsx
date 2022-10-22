@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
+
 // Helmet 을 통해 html head 부분에 접근 가능해짐
 const Title = styled.h1`
     font-size: 48px;
@@ -29,7 +30,7 @@ const Header = styled.header`
 const Overview = styled.div`
     display: flex;
     justify-content: space-between;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: white;
     padding: 10px 20px;
     border-radius: 10px;
 `;
@@ -46,6 +47,8 @@ const OverviewItem = styled.div`
 `;
 const Description = styled.p`
     margin: 20px 0px;
+    background-color: white;
+    border-radius: 10px;
 `;
 const Taps = styled.div`
     display: grid;
@@ -58,7 +61,7 @@ const Tap = styled.span<{ isActive: boolean }>`
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 400;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: white;
     padding: 7px 0px;
     border-radius: 10px;
     color: ${(props) =>
@@ -144,6 +147,7 @@ const Coin = () => {
         () => fetchPrice(coinId),
         { refetchInterval: 3000 }
     );
+
     const loading = isInfoLoading || isPriceLoading;
     return (
         <Container>
@@ -212,7 +216,10 @@ const Coin = () => {
                         {/* <Route path="/:coinId/*" element={<Coin />}></Route> */}
                         {/* Router.tsx 에 위 문장을 써줌으로써 중첩된 자식 루트 있다고 명시해줌 */}
                         {/* 상대경로 입력 */}
-                        <Route path={`/price`} element={<Price />} />
+                        <Route
+                            path={`/price`}
+                            element={<Price usdData={priceData!.quotes.USD} />}
+                        />
                         <Route
                             path="chart"
                             element={<Chart coinId={coinId!} />}
