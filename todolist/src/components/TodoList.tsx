@@ -14,11 +14,17 @@ const TodoList = () => {
         register,
         watch,
         handleSubmit,
+        setError,
+        // Error message 설정
         formState: { errors },
     } = useForm<IForm>({ defaultValues: { email: "@naver.com" } });
 
-    const onVaild = (data: any) => {
-        console.log(data);
+    const onVaild = (data: IForm) => {
+        // onSubmit이 됐을떄 handleSubmit에 의해 실행됨
+        // 이미 제출이 다 된거니까 값 비교 ㅇㅋ
+        if (data.password !== data.password1) {
+            setError("password1", { message: "Password are not the same" });
+        }
     };
     return (
         <>
@@ -42,9 +48,7 @@ const TodoList = () => {
                     })}
                     placeholder="Email"
                 />
-                <span style={{ border: "2px solid red" }}>
-                    {errors?.email?.message}
-                </span>
+                <span>{errors?.email?.message}</span>
                 <input
                     {...register("firstName", { required: true })}
                     placeholder="firstName"
