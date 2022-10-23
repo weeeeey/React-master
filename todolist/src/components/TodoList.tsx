@@ -1,29 +1,25 @@
 import { useForm } from "react-hook-form";
 
-interface IMembershipForm {
+interface IForm {
     email: string;
     firstName: string;
-    lastName: string;
+    lastName?: string; //필수가 아닌 값은 타입 정의시에 ? 넣어주면 됨
     userName: string;
     password: string;
     password1: string;
 }
 
 const TodoList = () => {
-    const { register, watch, handleSubmit, formState } =
-        useForm<IMembershipForm>();
-    // handleSubmit : validation 담당
-    // preventDefault도 담당 , 우리가 작성한 코드 진행하게 도와줌
-    // 인자로 2개 받아옴. 하나는 데이터가 유효할 떄 호출 할 함수.
-    // 다른 하나는 유효하지 않을떄 호출 할 함수(생략 가능)
+    const {
+        register,
+        watch,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IForm>({ defaultValues: { email: "@naver.com" } });
 
     const onVaild = (data: any) => {
         console.log(data);
     };
-    // formState를 통해 에러가 나는 state들을 볼 수 있음.
-    // 그 객체 안에 각 에러들의 type(에러 나는 타입),message,ref 담겨있음
-    console.log(formState.errors);
-
     return (
         <>
             <form
@@ -34,22 +30,35 @@ const TodoList = () => {
                     width: "300px",
                 }}
             >
+                {/* 정규식을 이용해서 validation 검증 */}
                 <input
-                    // required 는 데이터가 유효하진 검증 하기 위해 넣음
-                    // input 자체의 required와 다른 점: 그것은 HTML에 의해 보호돼서 누군가 그 요소를 지울 수 있음
-                    // required:true인 상태인데 입력하지 않고 제출하면
-                    // 리액트 훅 폼이 해당 지점으로 커서를 focus 해줄거임
-                    {...register("email", { required: true })}
+                    {...register("email", {
+                        required: true,
+                        // pattern: /^[A-Za-z0-9._%+-]+@naver.com$/,
+                        pattern: {
+                            value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+                            message: "Only naver.com emails allowed",
+                        },
+                    })}
                     placeholder="Email"
                 />
+                <span style={{ border: "2px solid red" }}>
+                    {errors?.email?.message}
+                </span>
                 <input
                     {...register("firstName", { required: true })}
                     placeholder="firstName"
                 />
+                <span style={{ border: "10px", borderBlockColor: "red" }}>
+                    {errors?.firstName?.message}
+                </span>
                 <input
                     {...register("lastName", { required: true, minLength: 5 })}
                     placeholder="lastName"
                 />
+                <span style={{ borderBlockColor: "red" }}>
+                    {errors?.lastName?.message}
+                </span>
                 <input
                     {...register("userName", {
                         required: true,
@@ -60,6 +69,9 @@ const TodoList = () => {
                     })}
                     placeholder="userName"
                 />
+                <span style={{ borderBlockColor: "red" }}>
+                    {errors?.userName?.message}
+                </span>
                 <input
                     {...register("password", {
                         required: "Your password is too short",
@@ -67,10 +79,16 @@ const TodoList = () => {
                     })}
                     placeholder="password"
                 />
+                <span style={{ borderBlockColor: "red" }}>
+                    {errors?.password?.message}
+                </span>
                 <input
                     {...register("password1", { required: true, minLength: 8 })}
                     placeholder="password1"
                 />
+                <span style={{ borderBlockColor: "red" }}>
+                    {errors?.password1?.message}
+                </span>
                 <button>회원가입</button>
             </form>
         </>
