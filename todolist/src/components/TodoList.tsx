@@ -7,6 +7,8 @@ interface IForm {
     userName: string;
     password: string;
     password1: string;
+
+    extraError?: string;
 }
 
 const TodoList = () => {
@@ -23,8 +25,15 @@ const TodoList = () => {
         // onSubmit이 됐을떄 handleSubmit에 의해 실행됨
         // 이미 제출이 다 된거니까 값 비교 ㅇㅋ
         if (data.password !== data.password1) {
-            setError("password1", { message: "Password are not the same" });
+            setError(
+                "password1",
+                { message: "Password are not the same" },
+                { shouldFocus: true }
+            );
+            // setError의 유용한 점: form에서 내가 고른 input 항목에 강제로 focus 시킬 수 있음
         }
+        // 해킹 당하거나 서버 끊기면
+        // setError("extraError", { message: "Server offline." });
     };
     return (
         <>
@@ -50,7 +59,21 @@ const TodoList = () => {
                 />
                 <span>{errors?.email?.message}</span>
                 <input
-                    {...register("firstName", { required: true })}
+                    //validate는 boolean을 리턴하는데 nicolas를 갖고 있지 않다면 true 리턴
+                    // validate에 string을 리턴하면 그게 message에 들어감
+                    // validate 안에 여러 함수 넣기 가능
+                    // 비동기로 설정해서 서버에서 데이터 받아와서도 사용 가능
+                    {...register("firstName", {
+                        required: true,
+                        // validate: (v) =>
+                        //     v.includes("nico") ? "no nico allow" : true,
+                        validate: {
+                            noNico: (v) =>
+                                v.includes("nico") ? "no nico" : true,
+                            noWeee: (v) =>
+                                v.includes("weee") ? "no weee" : true,
+                        },
+                    })}
                     placeholder="firstName"
                 />
                 <span style={{ border: "10px", borderBlockColor: "red" }}>
@@ -94,6 +117,8 @@ const TodoList = () => {
                     {errors?.password1?.message}
                 </span>
                 <button>회원가입</button>
+
+                <span>{errors?.extraError?.message}</span>
             </form>
         </>
     );
