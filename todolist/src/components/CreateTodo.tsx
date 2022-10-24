@@ -1,5 +1,5 @@
-import { useSetRecoilState } from "recoil";
-import { todoState } from "./atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { categoryState, todoState } from "./atoms";
 import { useForm } from "react-hook-form";
 
 interface IForm {
@@ -7,13 +7,14 @@ interface IForm {
 }
 
 const CreateTodo = () => {
+    const category = useRecoilValue(categoryState);
     const setTodos = useSetRecoilState(todoState);
     // useRecoilValue,useSetRecoilState 합친거
     const { register, handleSubmit, setValue } = useForm<IForm>();
     // handleValid는 data를 받아와서 data.todo로 접근. 그걸 풀어서 파라미터에 넣음
     const handleValid = ({ todo }: IForm) => {
         setTodos((oldTodos) => [
-            { text: todo, id: Date.now(), category: "TO_DO" },
+            { text: todo, id: Date.now(), category: category },
             ...oldTodos,
         ]);
         setValue("todo", "");
