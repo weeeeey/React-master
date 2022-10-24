@@ -6,6 +6,11 @@ export interface ITodo {
     category: "TO_DO" | "DOING" | "DONE";
 }
 
+export const categoryState = atom({
+    key: "category",
+    default: "TO_DO",
+});
+
 export const todoState = atom<ITodo[]>({
     key: "todo",
     default: [],
@@ -21,12 +26,7 @@ export const todoSelector = selector({
     // get: (option) => 옵션은 객체 형태임
     get: ({ get }) => {
         const todos = get(todoState);
-        // 배열로 감싸는거 잊지 말기
-        // todo가 지금 객체들의 [] 형태니까
-        return [
-            todos.filter((todo) => todo.category === "TO_DO"),
-            todos.filter((todo) => todo.category === "DOING"),
-            todos.filter((todo) => todo.category === "DONE"),
-        ];
+        const category = get(categoryState);
+        return todos.filter((todo) => todo.category === category);
     },
 });
