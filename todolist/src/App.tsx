@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import Membership from "./components/Membership";
 import TodoList from "./components/TodoList";
 
 const GlobalStyle = createGlobalStyle`
@@ -71,7 +70,6 @@ const App = () => {
     return (
         <div>
             <GlobalStyle />
-            <Membership />
             <TodoList />
         </div>
     );
