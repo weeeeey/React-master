@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 
 const TodoList = () => {
     const todos = useRecoilValue(todoState);
+    console.log(todos);
     return (
         <>
             <h1>To do List </h1>

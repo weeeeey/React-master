@@ -8,6 +8,11 @@ const Todo = ({ text, category, id }: ITodo) => {
         const {
             currentTarget: { name },
         } = e;
+        setTodo((oldTodos) => {
+            const targetIndex = oldTodos.findIndex((todo) => todo.id === id);
+            const newTodo = { text, id, category: name };
+            return oldTodos;
+        });
     };
     return (
         <li>
