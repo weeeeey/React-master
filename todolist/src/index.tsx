@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "styled-components";
 import { blackTheme } from "./components/Theme";
 import { RecoilRoot } from "recoil";
+import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -13,6 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
     <RecoilRoot>
         <ThemeProvider theme={blackTheme}>
+            <Helmet>
+                <title>To Do</title>
+            </Helmet>
             <App />
         </ThemeProvider>
     </RecoilRoot>
