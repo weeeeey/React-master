@@ -10,8 +10,12 @@ const Todo = ({ text, category, id }: ITodo) => {
         } = e;
         setTodo((oldTodos) => {
             const targetIndex = oldTodos.findIndex((todo) => todo.id === id);
-            const newTodo = { text, id, category: name };
-            return oldTodos;
+            const newTodo = { text, id, category: name as any };
+            return [
+                ...oldTodos.slice(0, targetIndex),
+                newTodo,
+                ...oldTodos.slice(targetIndex + 1),
+            ];
         });
     };
     return (
