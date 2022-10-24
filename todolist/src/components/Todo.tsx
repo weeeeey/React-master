@@ -10,6 +10,12 @@ const Todo = ({ text, category, id }: ITodo) => {
         } = e;
         setTodo((oldTodos) => {
             const targetIndex = oldTodos.findIndex((todo) => todo.id === id);
+            if (name === Categories.DELETE) {
+                return [
+                    ...oldTodos.slice(0, targetIndex),
+                    ...oldTodos.slice(targetIndex + 1),
+                ];
+            }
             const newTodo = { text, id, category: name as any };
             return [
                 ...oldTodos.slice(0, targetIndex),
@@ -18,6 +24,7 @@ const Todo = ({ text, category, id }: ITodo) => {
             ];
         });
     };
+
     return (
         <li>
             <span>{text}</span>
@@ -34,6 +41,11 @@ const Todo = ({ text, category, id }: ITodo) => {
             {category !== Categories.DONE && (
                 <button name={Categories.DONE} onClick={onClick}>
                     DONE
+                </button>
+            )}
+            {category !== Categories.DELETE && (
+                <button name={Categories.DELETE} onClick={onClick}>
+                    DELETE
                 </button>
             )}
         </li>
