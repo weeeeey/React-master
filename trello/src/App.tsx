@@ -2,7 +2,7 @@ import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { todoState } from "./components/atoms";
 import { useRecoilState } from "recoil";
-import DraggableComponent from "./components/DraggableComponent";
+import CardComponent from "./components/DraggableComponent";
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,7 +47,7 @@ const App = () => {
                                 {...magic.droppableProps}
                             >
                                 {todos.map((todo, index) => (
-                                    <DraggableComponent
+                                    <CardComponent
                                         key={todo}
                                         index={index}
                                         todo={todo}
