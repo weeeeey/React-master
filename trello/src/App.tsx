@@ -1,34 +1,37 @@
-import { minuteState, hourSelector } from "./components/atoms";
-import { useRecoilState } from "recoil";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const App = () => {
-    const [minute, setMinutes] = useRecoilState(minuteState);
-    const [hour, setHour] = useRecoilState(hourSelector);
-    // Selector 요소를 useRecoilState로 불러올 경우
-    // data 값은 get 옵션에 할당된거, setting 함수는 set 옵션에 할당된거 가져옴
-
-    const onChangeMinute = (e: React.FormEvent<HTMLInputElement>) => {
-        setMinutes(+e.currentTarget.value);
-    };
-    const onChangeHour = (e: React.FormEvent<HTMLInputElement>) => {
-        setHour(+e.currentTarget.value);
-    };
+    const onDragEnd = () => {};
     return (
         <>
-            <input
-                value={minute}
-                onChange={onChangeMinute}
-                type="number"
-                placeholder="Minutes"
-            />
-            <input
-                value={hour}
-                onChange={onChangeHour}
-                type="number"
-                placeholder="Hours"
-            />
+            {/* DragDropContext 컴포넌트에는 onDragEnd 함수와 children이 필요함 */}
+            {/* onDragEnd는 드래그가 끝났을때 실행할 함수 */}
+            {/* children은 컴포넌트면 됨 */}
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div>
+                    {/* Droppable 요소에는 Id와 children이 필요함 */}
+                    {/* Id는 길을 잃지 않기 위해 필요 */}
+                    {/* 여기에서는 children이 특이하게 함수 형태로 와야함 */}
+                    {/* children 모습 {()=>(<div></div>)} */}
+                    <Droppable droppableId="one">
+                        {() => (
+                            <ul>
+                                {/* Draggable 요소에는 index, Id와 children이 필요함 */}
+                                {/* index는 나중에 정렬 때 쓸 용도 */}
+                                {/* Id는 길을 잃지 않기 위해 필요 */}
+                                {/* 여기에서는 children이 특이하게 함수 형태로 와야함 */}
+                                {/* children 모습 {()=>(<div></div>)} */}
+                                <Draggable draggableId="first" index={0}>
+                                    {() => <li>One</li>}
+                                </Draggable>
+                                <Draggable draggableId="second" index={1}>
+                                    {() => <li>Two</li>}
+                                </Draggable>
+                            </ul>
+                        )}
+                    </Droppable>
+                </div>
+            </DragDropContext>
         </>
     );
 };
-
-export default App;
