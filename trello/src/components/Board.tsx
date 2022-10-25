@@ -17,7 +17,7 @@ const Board = ({ todos, boardId }: IBoardProps) => {
     return (
         <Droppable droppableId={boardId}>
             {(magic) => (
-                <Wrapper
+                <div
                     style={{ backgroundColor: "red" }}
                     ref={magic.innerRef}
                     {...magic.droppableProps}
@@ -26,7 +26,7 @@ const Board = ({ todos, boardId }: IBoardProps) => {
                         <CardComponent key={todo} index={index} todo={todo} />
                     ))}
                     {magic.placeholder}
-                </Wrapper>
+                </div>
             )}
         </Droppable>
     );
