@@ -17,7 +17,11 @@ const Board = ({ todos, boardId }: IBoardProps) => {
     return (
         <Droppable droppableId={boardId}>
             {(magic) => (
-                <Wrapper ref={magic.innerRef} {...magic.droppableProps}>
+                <Wrapper
+                    style={{ backgroundColor: "red" }}
+                    ref={magic.innerRef}
+                    {...magic.droppableProps}
+                >
                     {todos.map((todo, index) => (
                         <CardComponent key={todo} index={index} todo={todo} />
                     ))}
