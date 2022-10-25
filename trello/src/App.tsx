@@ -42,7 +42,21 @@ const App = () => {
     // 둘다 drop하는 보드의 Id가 들어가 있고
     // index로 움직인(소스) 아이템과 도착한(데스티네이션) 위치 정보 있음
     // };
-    const onDragEnd = ({ destination, source }: DropResult) => {};
+    const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+        if (!destination) return;
+        // detination이 비는 경우는 드래그 할려던걸 제자리에 두는 경우
+        setTodo((oldTodo) => {
+            const tempTodo = [...oldTodo];
+            // splice는 해당 배열을 직접적으로 건드려서 복사해줘야함
+            tempTodo.splice(source.index, 1);
+            // splice(a,b) : a위치부터 b개를 지운다
+            tempTodo.splice(destination.index, 0, draggableId);
+            // splice(a,b,c) : a위치부터 b개를 지우고 c로 그 자리를 채운다
+            // splice(a,0,c) : a위치에 c를 채운다
+            // draggableId 에 todo를 넣어줬었음
+            return tempTodo;
+        });
+    };
     return (
         <Wrapper>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -57,7 +71,7 @@ const App = () => {
                             >
                                 {todos.map((todo, index) => (
                                     <Draggable
-                                        key={index}
+                                        key={todo}
                                         draggableId={todo}
                                         index={index}
                                     >
