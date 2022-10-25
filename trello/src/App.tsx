@@ -60,6 +60,11 @@ const App = () => {
                                 ))}
                                 {magic.placeholder}
                                 {/* 위의 문장을 작성해주면 드래그시에도Board의 크기 변화 x */}
+
+                                {/* provided.placeholder (?ReactElement)
+Draggable 엘리먼트를 드래그하는 동안 position: fixed(영역을 고정시킴)를 적용합니다.
+Draggable을 드래그할 때 Droppable 리스트가 작아지는 것을 방지하기 위해 필요합니다.
+Draggable 노드의 형제로 렌더링하는 것이 좋습니다. */}
                             </Boards>
                         )}
                     </Droppable>
