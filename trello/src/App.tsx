@@ -1,22 +1,22 @@
-import { minuteState, hourSelector } from './components/atoms';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import React from 'react';
+import { minutes, hourSelector } from "./components/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const App = () => {
-    const [minutes, setMinutes] = useRecoilState(minuteState);
-    const hours = useRecoilValue(hourSelector);
-    const onMinutesChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const [minute, setMinutes] = useRecoilState(minutes);
+    const hour = useRecoilValue(hourSelector);
+
+    const onChangeMinute = (e: React.FormEvent<HTMLInputElement>) => {
         setMinutes(+e.currentTarget.value);
     };
     return (
         <>
             <input
-                value={minutes}
+                value={minute}
+                onChange={onChangeMinute}
                 type="number"
                 placeholder="Minutes"
-                onChange={onMinutesChange}
             />
-            <input value={hours} type="number" placeholder="Hours" />
+            <input value={hour} type="number" placeholder="Hours" />
         </>
     );
 };
