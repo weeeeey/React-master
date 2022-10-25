@@ -1,6 +1,12 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable,
+    DropResult,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
-
+import { todoState } from "./components/atoms";
+import { useRecoilState } from "recoil";
 const Wrapper = styled.div`
     display: flex;
     max-width: 480px;
@@ -10,10 +16,9 @@ const Wrapper = styled.div`
     align-items: center;
     height: 100vh;
 `;
-
 const Boards = styled.div`
     display: grid;
-    width: 100%;
+    width: 100vh;
     grid-template-columns: repeat(1, 1fr);
 
     padding: 20px 10px;
@@ -29,10 +34,15 @@ const Card = styled.div`
     background-color: ${(props) => props.theme.cardColor};
 `;
 
-const todos = ["a", "b", "c", "d", "e", "f"];
-
 const App = () => {
-    const onDragEnd = () => {};
+    const [todos, setTodo] = useRecoilState(todoState);
+    // const onDragEnd = (arg: any) => {
+    //     console.log(arg);
+    // 확인해보면 arg 에는 destination , source가 들어가있음
+    // 둘다 drop하는 보드의 Id가 들어가 있고
+    // index로 움직인(소스) 아이템과 도착한(데스티네이션) 위치 정보 있음
+    // };
+    const onDragEnd = ({ destination, source }: DropResult) => {};
     return (
         <Wrapper>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -46,7 +56,11 @@ const App = () => {
                                 {...magic.droppableProps}
                             >
                                 {todos.map((todo, index) => (
-                                    <Draggable draggableId={todo} index={index}>
+                                    <Draggable
+                                        key={index}
+                                        draggableId={todo}
+                                        index={index}
+                                    >
                                         {(magic) => (
                                             <Card
                                                 ref={magic.innerRef}
