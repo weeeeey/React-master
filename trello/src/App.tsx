@@ -2,8 +2,11 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { todoState } from "./components/atoms";
 import { useRecoilState } from "recoil";
+import { useState } from "react";
 import Board from "./components/Board";
-
+import { FcAddColumn } from "react-icons/fc";
+import { useForm } from "react-hook-form";
+import { ITodo, ITodoState } from "./components/atoms";
 const Wrapper = styled.div`
     display: flex;
     max-width: 680px;
@@ -21,9 +24,29 @@ const DropBoards = styled.div`
     gap: 10px;
     grid-template-columns: repeat(3, 1fr);
 `;
-
+const Form = styled.form`
+    width: 50%;
+    input {
+        width: 80%;
+        height: auto;
+        :hover {
+            background-color: whitesmoke;
+        }
+    }
+    button {
+        height: auto;
+        :hover {
+            background-color: whitesmoke;
+        }
+    }
+`;
+interface IForm {
+    title: string;
+}
 const App = () => {
     const [todos, setTodo] = useRecoilState(todoState);
+    const { register, handleSubmit, setValue } = useForm<IForm>();
+    const [inputValue, setInputValue] = useState<string>("");
     const onDragEnd = (info: DropResult) => {
         const { destination, source } = info;
         if (!destination) return;
@@ -54,20 +77,42 @@ const App = () => {
             });
         }
     };
+    const onVaild = ({ title }: IForm) => {
+        setInputValue(title);
+        setValue("title", "");
+        setTodo({
+            ...todos,
+            [title]: [],
+        });
+    };
     return (
-        <Wrapper>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <DropBoards>
-                    {Object.keys(todos).map((boardId) => (
-                        <Board
-                            boardId={boardId}
-                            key={boardId}
-                            todos={todos[boardId]}
-                        />
-                    ))}
-                </DropBoards>
-            </DragDropContext>
-        </Wrapper>
+        <>
+            <Form onSubmit={handleSubmit(onVaild)}>
+                <input
+                    {...register("title", {
+                        required: "값을 입력하세요",
+                        value: inputValue,
+                    })}
+                    placeholder="input Board Name"
+                />
+                <button>
+                    <FcAddColumn />
+                </button>
+            </Form>
+            <Wrapper>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <DropBoards>
+                        {Object.keys(todos).map((boardId) => (
+                            <Board
+                                boardId={boardId}
+                                key={boardId}
+                                todos={todos[boardId]}
+                            />
+                        ))}
+                    </DropBoards>
+                </DragDropContext>
+            </Wrapper>
+        </>
     );
 };
 
