@@ -19,11 +19,6 @@ interface IDraggableProps {
 const CardComponent = ({ todo, index }: IDraggableProps) => {
     return (
         <Draggable draggableId={todo} index={index}>
-            {/* Draggablestate snapshot
-
-            isDragging: boolean
-            Draggable이 활발하게 드래그 중이거나 드롭 애니메이션인 경우 
-            true로 설정합니다. */}
             {(magic, snapshot) => (
                 <Card
                     isDragging={snapshot.isDragging}

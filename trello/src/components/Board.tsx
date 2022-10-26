@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import CardComponent from "./CardComponent";
+import { useRef } from "react";
 
 const Wrapper = styled.div`
     width: 300px;
@@ -40,9 +41,22 @@ const Area = styled.div<IAreaProps>`
 `;
 
 const Board = ({ todos, boardId }: IBoardProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    // ref를 통해 HTML 요소에 접근 가능해짐
+    const onClick = () => {
+        // click을 하면 inputRef에 등록된 HTML 요소로 접근해서 함수들을 실행함
+        // focus 는 포인터를 그쪽으로 가르킴
+        inputRef.current?.focus();
+        // blur는 포인터를 벗어나게 함
+        setTimeout(() => {
+            inputRef.current?.blur();
+        }, 3000);
+    };
     return (
         <Wrapper>
             <Title>{boardId}</Title>
+            <input ref={inputRef} placeholder="입력하세요" />
+            <button onClick={onClick}>Click me!</button>
             <Droppable droppableId={boardId}>
                 {(magic, info) => (
                     <Area
