@@ -17,6 +17,15 @@ interface IDraggableProps {
     todoText: string;
     index: number;
 }
+
+// {id:1,text:"hi"}, {id:2,text:"hello"}
+
+// Uncaught Error: Objects are not valid as a React child (found: object with keys {id, text}). If you meant to render a collection of children, use an array instead.
+
+// DroppableBoard(Board)에서 DraggableCard(Card)로 props를 전달할 때 todo 객체를 통채로 보내면 위와 같은 에러가 발생할 수 있으므로 객체에서 값을 꺼내서 따로따로 보내야 합니다.
+// todo={todo} (X)
+// todoId={todo.id} todoText={todo.text} (O)
+
 const CardComponent = ({ todoId, todoText, index }: IDraggableProps) => {
     return (
         // number + "" => string,   draggabledId 는 string 형식
