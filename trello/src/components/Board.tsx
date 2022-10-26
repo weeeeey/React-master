@@ -90,6 +90,7 @@ const Board = ({ todos, boardId }: IBoardProps) => {
                         {todos.map((todo, index) => (
                             <CardComponent
                                 key={todo.id}
+                                boardId={boardId}
                                 index={index}
                                 todoId={todo.id}
                                 todoText={todo.text}

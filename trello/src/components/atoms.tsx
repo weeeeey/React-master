@@ -2,12 +2,13 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 //  https://velog.io/@eunjeong/TIL-Recoil-persist
 // localStorage에 데이터 저장
+
 export interface ITodo {
     id: number;
     text: string;
 }
 
-interface ITodoState {
+export interface ITodoState {
     [key: string]: ITodo[];
 }
 

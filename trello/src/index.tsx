@@ -7,6 +7,9 @@ import { createGlobalStyle } from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./components/theme";
 import { RecoilRoot } from "recoil";
+
+import { Helmet } from "react-helmet";
+
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -76,6 +79,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <RecoilRoot>
+        <Helmet>
+            <title>Drag & Drop</title>
+        </Helmet>
         <ThemeProvider theme={darkTheme}>
             <GlobalStyle />
             <App />
