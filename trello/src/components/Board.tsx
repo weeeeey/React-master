@@ -4,13 +4,13 @@ import CardComponent from "./CardComponent";
 
 const Wrapper = styled.div`
     width: 300px;
-    padding: 20px 10px;
     padding-top: 10px;
     background-color: ${(prop) => prop.theme.boardColor};
     border-radius: 5px;
     min-height: 200px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 `;
 const Title = styled.h2`
     text-align: center;
@@ -30,12 +30,13 @@ interface IAreaProps {
 const Area = styled.div<IAreaProps>`
     background-color: ${(props) =>
         props.isDraggingOver
-            ? "pink"
+            ? "#dfe6e9"
             : props.isDraggingFromThis
-            ? "red"
-            : "blue"};
+            ? "#b2bec3"
+            : "transparent"};
     flex-grow: 1;
     transition: background-color 0.3s ease-in-out;
+    padding: 20px;
 `;
 
 const Board = ({ todos, boardId }: IBoardProps) => {
@@ -43,19 +44,6 @@ const Board = ({ todos, boardId }: IBoardProps) => {
         <Wrapper>
             <Title>{boardId}</Title>
             <Droppable droppableId={boardId}>
-                {/* Droppablestate snapshot
-
-isDraggingOver: boolean
-현재 선택한 Draggable이 특정 Droppable위에 드래깅 되고 있는지 여부 확인
-
-draggingOverWith: ?DraggableId
-Droppable 위로 드래그하는 Draggable ID
-
-draggingFromThisWith: ?DraggableId
-현재 Droppable에서 벗어난 드래깅되고 있는 Draggable ID
-
-isUsingPlaceholder: boolean
-placeholder가 사용되고 있는지 여부 */}
                 {(magic, info) => (
                     <Area
                         isDraggingOver={info.isDraggingOver}

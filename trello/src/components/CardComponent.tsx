@@ -2,11 +2,14 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import React from "react";
 
-const Card = styled.div`
+const Card = styled.div<{ isDragging: boolean }>`
     border-radius: 5px;
     margin-bottom: 5px;
-    padding: 10px 10px;
-    background-color: ${(props) => props.theme.cardColor};
+    padding: 10px;
+    background-color: ${(props) =>
+        props.isDragging ? "#e4f2ff" : props.theme.cardColor};
+    box-shadow: ${(props) =>
+        props.isDragging ? "0px 2px 5px rgba(0,0,0,0.5)" : "none"};
 `;
 
 interface IDraggableProps {
@@ -16,8 +19,14 @@ interface IDraggableProps {
 const CardComponent = ({ todo, index }: IDraggableProps) => {
     return (
         <Draggable draggableId={todo} index={index}>
-            {(magic) => (
+            {/* Draggablestate snapshot
+
+            isDragging: boolean
+            Draggable이 활발하게 드래그 중이거나 드롭 애니메이션인 경우 
+            true로 설정합니다. */}
+            {(magic, snapshot) => (
                 <Card
+                    isDragging={snapshot.isDragging}
                     ref={magic.innerRef}
                     {...magic.draggableProps}
                     {...magic.dragHandleProps}
