@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import CardComponent from "./CardComponent";
 import { useForm } from "react-hook-form";
-import { ITodo, todoState } from "./atoms";
-import { useSetRecoilState } from "recoil";
+import { boardState, ITodo, todoState } from "./atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 const Wrapper = styled.div`
     width: 300px;
@@ -55,7 +55,8 @@ interface IBoardProps {
 
 const Board = ({ todos, boardId }: IBoardProps) => {
     const { register, setValue, handleSubmit } = useForm<IForm>();
-    const setTodo = useSetRecoilState(todoState);
+    const [todoAtom, setTodo] = useRecoilState(todoState);
+    const setBoard = useSetRecoilState(boardState);
     const onVaild = ({ todo }: IForm) => {
         const newTodo = {
             id: Date.now(),
@@ -69,6 +70,12 @@ const Board = ({ todos, boardId }: IBoardProps) => {
         });
         setValue("todo", "");
     };
+    const handleDeleteBoards = (e: React.FormEvent<HTMLButtonElement>) => {
+        const temp = { ...todoAtom };
+        delete temp[boardId];
+        setTodo(temp);
+        setBoard((props) => props.filter((name) => name !== boardId));
+    };
     return (
         <Wrapper>
             <Form onSubmit={handleSubmit(onVaild)}>
@@ -78,6 +85,7 @@ const Board = ({ todos, boardId }: IBoardProps) => {
                     placeholder={`Add task on ${boardId}`}
                 />
             </Form>
+            <button onClick={handleDeleteBoards}>Delete</button>
             <Title>{boardId}</Title>
             <Droppable droppableId={boardId}>
                 {(magic, info) => (

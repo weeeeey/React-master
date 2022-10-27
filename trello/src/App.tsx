@@ -1,12 +1,11 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { todoState } from "./components/atoms";
+import { todoState, boardState } from "./components/atoms";
 import { useRecoilState } from "recoil";
-import { useState } from "react";
 import Board from "./components/Board";
-import { FcAddColumn } from "react-icons/fc";
+import { BiCommentAdd } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import { ITodo, ITodoState } from "./components/atoms";
 const Wrapper = styled.div`
     display: flex;
     max-width: 680px;
@@ -25,16 +24,14 @@ const DropBoards = styled.div`
     grid-template-columns: repeat(3, 1fr);
 `;
 const Form = styled.form`
-    width: 50%;
+    display: inline;
     input {
-        width: 80%;
-        height: auto;
+        width: 50%;
         :hover {
             background-color: whitesmoke;
         }
     }
     button {
-        height: auto;
         :hover {
             background-color: whitesmoke;
         }
@@ -44,11 +41,13 @@ interface IForm {
     title: string;
 }
 const App = () => {
+    const [board, setBoard] = useRecoilState(boardState);
+    // const setBoard = useSetRecoilState(boardState);
     const [todos, setTodo] = useRecoilState(todoState);
     const { register, handleSubmit, setValue } = useForm<IForm>();
-    const [inputValue, setInputValue] = useState<string>("");
     const onDragEnd = (info: DropResult) => {
         const { destination, source } = info;
+        console.log(info);
         if (!destination) return;
         if (destination?.droppableId === source.droppableId) {
             setTodo((allTodos) => {
@@ -78,12 +77,20 @@ const App = () => {
         }
     };
     const onVaild = ({ title }: IForm) => {
-        setInputValue(title);
         setValue("title", "");
+        if (board.includes(title)) {
+            alert("중복된 값");
+            return;
+        }
+        setBoard((prop) => [...prop, title]);
         setTodo({
             ...todos,
             [title]: [],
         });
+    };
+    const deleteAll = (e: React.FormEvent<HTMLButtonElement>) => {
+        setTodo({});
+        setBoard([]);
     };
     return (
         <>
@@ -91,14 +98,16 @@ const App = () => {
                 <input
                     {...register("title", {
                         required: "값을 입력하세요",
-                        value: inputValue,
                     })}
                     placeholder="input Board Name"
                 />
                 <button>
-                    <FcAddColumn />
+                    <BiCommentAdd />
                 </button>
             </Form>
+            <button onClick={deleteAll}>
+                <RiDeleteBin6Line />
+            </button>
             <Wrapper>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <DropBoards>

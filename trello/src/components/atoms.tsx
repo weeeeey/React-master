@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { recoilPersist } from "recoil-persist";
+// import { recoilPersist } from "recoil-persist";
 //  https://velog.io/@eunjeong/TIL-Recoil-persist
 // localStorage에 데이터 저장
 
@@ -12,14 +12,15 @@ export interface ITodoState {
     [key: string]: ITodo[];
 }
 
-const { persistAtom } = recoilPersist();
+// const { persistAtom } = recoilPersist();
 
 export const todoState = atom<ITodoState>({
     key: "todo",
-    default: {
-        "to do": [],
-        doing: [],
-        done: [],
-    },
-    effects_UNSTABLE: [persistAtom],
+    default: {},
+    // effects_UNSTABLE: [persistAtom],
+});
+
+export const boardState = atom<string[]>({
+    key: "board",
+    default: [],
 });
