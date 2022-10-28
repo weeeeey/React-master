@@ -4,12 +4,13 @@ import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRecoilState } from "recoil";
 import { todoState, ITodoState } from "./atoms";
+import { RiDragMove2Line } from "react-icons/ri";
 
 const Card = styled.div<{ isDragging: boolean }>`
     border-radius: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
     /* 맨 오른쪽으로 보내는 법 flex, justify-content */
+    margin-bottom: 5px;
+    padding: 5px 0;
     display: flex;
     justify-content: space-between;
     background-color: ${(props) =>
@@ -57,9 +58,13 @@ const CardComponent = ({
                     isDragging={snapshot.isDragging}
                     ref={magic.innerRef}
                     {...magic.draggableProps}
-                    {...magic.dragHandleProps}
                 >
-                    {todoText}
+                    <div>
+                        <span {...magic.dragHandleProps}>
+                            <RiDragMove2Line style={{ fontSize: "15px" }} />
+                        </span>
+                        <span style={{ fontSize: "1rem" }}> {todoText}</span>
+                    </div>
                     <button onClick={handleDeleteCard}>
                         <AiOutlineDelete />
                     </button>
