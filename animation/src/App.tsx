@@ -15,7 +15,7 @@ const Box = styled(motion.div)`
     height: 200px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    background-color: white;
+    background-color: rgba(255, 255, 255, 1);
     border-radius: 40px;
     box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
@@ -23,17 +23,24 @@ const Box = styled(motion.div)`
 const boxVars = {
     hover: { scale: 1.5, rotateZ: 90 },
     click: { scale: 1, borderRadius: "100px" },
+    dragColor: {
+        backgroundColor: "rgba(46,204,113)",
+        // rgba값이 아닌 blue, yellow 같이 스트링 값 넣으면 애니메이션 먹힐수있음
+        transition: { duration: 2 },
+    },
 };
 
 const App = () => {
     return (
         <>
             <Wrapper>
-                {/* <Box
-                    whileHover={{ scale: 1.5, rotateZ: 90 }}
-                    whileTap={{ scale: 1, borderRadius: "100px" }}
-                /> */}
-                <Box variants={boxVars} whileHover="hover" whileTap="click" />
+                <Box
+                    drag
+                    variants={boxVars}
+                    whileDrag="dragColor"
+                    whileHover="hover"
+                    whileTap="click"
+                />
             </Wrapper>
         </>
     );
