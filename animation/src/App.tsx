@@ -38,9 +38,15 @@ const boxVars = {
             duration: 1,
             bounce: 0.5,
             delayChildren: 0.5,
-            staggerChildren: 0.5,
+            staggerChildren: 2,
             // Children들을 선언함으로써 엔진 자체에서 계산해가며
             // 선언된 자식들의 순차대로 적용시켜줌
+
+            // duration : 화면전환 애니메이션을 수행하는 시간에 대한 길이를 정의합니다.
+            // staggered : 0부터 1까지 float 값이 들어가며, duration내에서 staggered의 값의 비율만큼
+            // 애니메이션을 지연시켰다가 빠르게 남은 프레임들의 애니메이션을 실행시킵니다.
+            // 예를들어 duration의 값이 5이고 staggered의 값은 0.2라고 가정하면 1초정도 애니메이션을
+            // 지연시켰다가 4초만에 모든 프레임을 실행시킵니다.
         },
     },
 };
@@ -48,11 +54,9 @@ const boxVars = {
 const CircleVars = {
     start: {
         opacity: 0,
-        y: 0,
     },
     end: {
         opacity: 1,
-        y: 10,
     },
 };
 const App = () => {
