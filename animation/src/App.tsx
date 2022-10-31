@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 const Wrapper = styled(motion.div)`
     height: 100vh;
@@ -40,23 +39,29 @@ const boxVars = {
     },
 };
 
+// useTransform
+
+// useTransform 훅을 통해 MotionValues를 연결합니다.
+// useTransform()는 한 값 범위에서 다른 값 범위로 매핑하여 다른 MotionValue의 output을 변환하는 MotionValue를 만듭니다.
+// x(Motion Value)값을 다른 output값으로 변환해준다.
+// ex) x: -400 => 1
+// ```
+// const x = useMotionValue(0)
+// const input = [-200, 0, 200]
+// const output = [0, 1, 0]
+// const opacity = useTransform(x, input, output)
+
+// return < motion.div drag="x" style={{ x, opacity }} />
+// ```
+// https://www.framer.com/docs/motionvalue/##usetransform
+
 const App = () => {
     const x = useMotionValue(0);
-    // console.log(x) 이것을 선언하더라도 Motion은 재랜더링을 하지 않아서
-    // 콘솔창에 x 값을 보여주지 않음
-
-    useEffect(() => {
-        x.onChange(() => console.log(x.get()));
-    }, [x]);
-
+    const potato = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+    // x값이 -800,0,800 위치에서 potato값을 2,1,0,1 값으로 변화시킨다
     return (
         <Wrapper>
-            {/* <SmallBox style={{x:x}} drag='x' dragSnapToOrigin /> */}
-            {/* 해당되는 컴포넌트의 x값 좌표를 계속 추적할 수 있음 */}
-
-            <SmallBox style={{ x }} drag="x" dragSnapToOrigin />
-            {/* x 값을 추적할 수 있으므로 세팅도 가능해짐 */}
-            <button onClick={() => x.set(-200)}>click me!</button>
+            <SmallBox style={{ x, scale: potato }} drag="x" dragSnapToOrigin />
         </Wrapper>
     );
 };
