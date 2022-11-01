@@ -57,11 +57,15 @@ const boxVars = {
 
 const App = () => {
     const x = useMotionValue(0);
-    const potato = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
+    const potato = useTransform(x, [-800, 0, 800], [-360, 0, 360]);
     // x값이 -800,0,800 위치에서 potato값을 2,1,0,1 값으로 변화시킨다
     return (
         <Wrapper>
-            <SmallBox style={{ x, scale: potato }} drag="x" dragSnapToOrigin />
+            <SmallBox
+                style={{ x, rotateZ: potato }}
+                drag="x"
+                dragSnapToOrigin
+            />
         </Wrapper>
     );
 };
