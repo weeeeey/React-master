@@ -1,106 +1,67 @@
 import React from "react";
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 const Wrapper = styled(motion.div)`
     height: 100vh;
     width: 100vw;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     flex-direction: column;
 `;
 const Box = styled(motion.div)`
     width: 400px;
-    height: 200px;
+    height: 400px;
     background-color: rgba(255, 255, 255, 1);
     border-radius: 40px;
-    position: absolute;
-    top: 100px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 28px;
+`;
+const Circle = styled(motion.div)`
+    background-color: #00a5ff;
+    height: 100px;
+    width: 100px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-// custom
-// 각 애니메이션 컴포넌트에 대해 동적 variants를 다르게 적용할 때 사용할 수 있는 사용자 지정 데이터입니다.
-// ```
-// const variants = {
-// visible: (custom) => ({
-// opacity: 1,
-// transition: { delay: custom * 0.2 }
-// })
-// }
+// Layout animation
+// layout: boolean | "position" | "size"
+// true인 경우 이 컴포넌트는 레이아웃이 변경될 때 새 위치에 자동으로 애니메이션을 적용합니다. 크기나 위치가 변경될 때 모션 컴포넌트의 레이아웃에 자동으로 애니메이션을 적용하려면 레이아웃 prop을 제공합니다. 부모 플렉스박스 방향, 너비, 상단/오른쪽 등 레이아웃 변경의 원인이 무엇이든 상관없이 애니메이션 자체는 최대 성능을 위해 변환으로 수행됩니다.
+// ex) < motion.div layout>< /motion.div>
 
-// < motion.div custom={0} animate="visible" variants={variants} />
-// < motion.div custom={1} animate="visible" variants={variants} />
-// < motion.div custom={2} animate="visible" variants={variants} />
-// ```
-// https://www.framer.com/docs/component/###custom
+// Syncing layout animations
+// 모션 컴포넌트의 layout prop은 레이아웃이 변할 때마다, 자동으로 애니메이션을 적용합니다.
+// https://www.framer.com/docs/animate-shared-layout/#syncing-layout-animations
 
-// exitBeforeEnter
-// true로 설정하면 AnimatePresence는 한 번에 하나의 컴포넌트만 랜더링합니다. exiting중인 컴포넌트는 entering하는 컴포넌트가 렌더링되기 전에 exit 애니메이션을 완료합니다.
-// ```
-// < AnimatePresence exitBeforeEnter>
-// < motion.div key={currentItem} exit={{ opacity: 0 }} />
-// < /AnimatePresence>
-// ```
-// https://www.framer.com/docs/animate-presence/###exitbeforeenter
-
-const boxVar = {
-    entry: (isBack: boolean) => ({
-        x: isBack ? -500 : 500,
-        opacity: 0,
-        scale: 0,
-    }),
-    center: {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        transition: {
-            duration: 1,
-        },
-    },
-    exit: (isBack: boolean) => ({
-        x: isBack ? 500 : -500,
-        opacity: 0,
-        scale: 0,
-        transition: {
-            duration: 1,
-        },
-    }),
-};
+// Animate between components
+// AnimateSharedLayout은 동일한 layoutId prop을 가진 모션 컴포넌트들 간에 애니메이션을 적용할 수 있습니다. layoutId가 있는 새 컴포넌트가 추가되고 다른 컴포넌트가 제거되면 이전 컴포넌트에서 새 컴포넌트로 레이아웃 애니메이션을 수행합니다. 새 컴포넌트는 이전 컴포넌트의 애니메이션 값도 초기 상태로 상속합니다. 따라서 시각적으로 하나의 연속 컴포넌트로 처리됩니다.
+// ex) isSelected && < motion.div layoutId="underline" />
+// https://www.framer.com/docs/animate-shared-layout/#animate-between-components
 
 const App = () => {
-    const [visible, setVisible] = useState(1);
-    const [back, setBack] = useState(false);
-    const nextPlease = () => {
-        setBack(false);
-        setVisible((prev) => (prev === 10 ? 10 : prev + 1));
-    };
-    const prevPlease = () => {
-        setBack(true);
-        setVisible((prev) => (prev === 1 ? 1 : prev - 1));
-    };
+    const [click, setClick] = useState(false);
+    const toggleClick = () => setClick((prev) => !prev);
     return (
-        <Wrapper>
-            <AnimatePresence custom={back}>
-                <Box
-                    custom={back}
-                    variants={boxVar}
-                    initial="entry"
-                    animate="center"
-                    exit="exit"
-                    key={visible}
-                >
-                    {visible}
-                </Box>
-            </AnimatePresence>
-            <button onClick={nextPlease}>next</button>
-            <button onClick={prevPlease}>prev</button>
+        <Wrapper onClick={toggleClick}>
+            <Box>
+                {/* layout 이라는 키워드 넣어주기만 해도 
+                CSS의 변화는 자동으로 애니메이션 효과 적용됨 */}
+                {click ? (
+                    <Circle layoutId="circle" style={{ borderRadius: 50 }} />
+                ) : null}
+            </Box>
+            <Box>
+                {!click ? (
+                    <Circle
+                        layoutId="circle"
+                        style={{ borderRadius: 0, scale: 2 }}
+                    />
+                ) : null}
+            </Box>
         </Wrapper>
     );
 };
