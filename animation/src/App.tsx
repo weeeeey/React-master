@@ -1,24 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useScroll } from "framer-motion";
 
 const Wrapper = styled(motion.div)`
-    height: 100vh;
+    height: 200vh;
     width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
-const BiggerBox = styled(motion.div)`
-    width: 600px;
-    height: 600px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 const SmallBox = styled(motion.div)`
     width: 200px;
     height: 200px;
@@ -29,40 +20,40 @@ const SmallBox = styled(motion.div)`
     box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const boxVars = {
-    hover: { rotateZ: 90 },
-    click: { borderRadius: "100px" },
-    dragColor: {
-        backgroundColor: "rgba(46,204,113)",
-        // rgba값이 아닌 blue, yellow 같이 스트링 값 넣으면 애니메이션 먹힐수있음
-        transition: { duration: 2 },
-    },
-};
-
-// useTransform
-
-// useTransform 훅을 통해 MotionValues를 연결합니다.
-// useTransform()는 한 값 범위에서 다른 값 범위로 매핑하여 다른 MotionValue의 output을 변환하는 MotionValue를 만듭니다.
-// x(Motion Value)값을 다른 output값으로 변환해준다.
-// ex) x: -400 => 1
+// useViewportScroll(): ScrollMotionValues
+// 뷰포트가 스크롤될 때 업데이트되는 MotionValues를 리턴합니다.
+// 아래 값들은 모두 MotionValue< number >를 넘겨줍니다.
+// scrollX: 실제 수평 스크롤 픽셀 ex) 500px
+// scrollY: 실제 수직 스크롤 픽셀 ex) 500px
+// scrollXProgress : 0 ~ 1 사이의 수평 스크롤
+// scrollYProgress : 0 ~ 1 사이의 수직 스크롤(가장 상단 0, 가장 하단 1)
 // ```
-// const x = useMotionValue(0)
-// const input = [-200, 0, 200]
-// const output = [0, 1, 0]
-// const opacity = useTransform(x, input, output)
-
-// return < motion.div drag="x" style={{ x, opacity }} />
+// export const MyComponent = () => {
+// const { scrollYProgress } = useViewportScroll()
+// return < motion.div style={{ scaleX: scrollYProgress }} />
+// }
 // ```
-// https://www.framer.com/docs/motionvalue/##usetransform
+// https://www.framer.com/docs/motionvalue/##useviewportscroll
 
 const App = () => {
     const x = useMotionValue(0);
     const potato = useTransform(x, [-800, 0, 800], [-360, 0, 360]);
-    // x값이 -800,0,800 위치에서 potato값을 2,1,0,1 값으로 변화시킨다
+    const gradient = useTransform(
+        x,
+        [-800, 800],
+        [
+            "linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))",
+            "linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))",
+        ]
+    );
+    const { scrollYProgress } = useScroll();
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
     return (
-        <Wrapper>
+        <Wrapper style={{ background: gradient }}>
             <SmallBox
-                style={{ x, rotateZ: potato }}
+                // smallBox에 x를 선언한건 x의 위치를 변수 x에 저장하기 위함
+                // scale은 scrollYProgress에 의존하므로 스크롤에 따라 크기 달라짐
+                style={{ x, rotateZ: potato, scale }}
                 drag="x"
                 dragSnapToOrigin
             />
