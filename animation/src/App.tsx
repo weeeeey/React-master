@@ -9,6 +9,7 @@ const Wrapper = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 `;
 const Box = styled(motion.div)`
     width: 400px;
@@ -18,66 +19,78 @@ const Box = styled(motion.div)`
     position: absolute;
     top: 100px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
 `;
 
 // AnimatePresence
-
-// AnimatePresence를 사용하면 React 트리에서 컴포넌트가 제거될 때 제거되는 컴포넌트에 애니메이션 효과를 줄 수 있습니다. React에는 다음과 같은 수명 주기 메서드가 없기 때문에 종료 애니메이션을 활성화해야 합니다.
-
-// exit
-// 이 컴포넌트가 트리에서 제거될 때 애니메이션할 대상입니다.
+// AnimatePresence의 단일 자식 key를 변경하여 슬라이드쇼(슬라이더)와 같은 컴포넌트를 쉽게 만들 수 있습니다.
 // ```
-// import { motion, AnimatePresence } from "framer-motion"
-
-// export const MyComponent = ({ isVisible }) => (
+// export const Slideshow = ({ image }) => (
 // < AnimatePresence>
-// {isVisible && (
-// initial={{ opacity: 0 }}
-// animate={{ opacity: 1 }}
-// exit={{ opacity: 0 }}
+// key={image.src}
+// src={image.src}
+// initial={{ x: 300, opacity: 0 }}
+// animate={{ x: 0, opacity: 1 }}
+// exit={{ x: -300, opacity: 0 }}
 // />
-// )}
 // < /AnimatePresence>
 // )
 // ```
-// https://www.framer.com/docs/animate-presence/
+// https://www.framer.com/docs/animate-presence/##unmount-animations
 
+// Slider 예시 코드
+// https://codesandbox.io/s/framer-motion-image-gallery-pqvx3?from-embed
 const boxVar = {
-    initial: {
+    invisible: {
+        x: 500,
         opacity: 0,
         scale: 0,
     },
     visible: {
+        x: 0,
         opacity: 1,
         scale: 1,
-        rotateZ: 360,
+        transition: {
+            duration: 1,
+        },
     },
-    leaving: {
+    exit: {
+        x: -500,
         opacity: 0,
         scale: 0,
-        y: 50,
+        transition: {
+            duration: 1,
+        },
     },
 };
 
 const App = () => {
-    const [showing, setShowing] = useState(false);
-    const toggleShowing = () => setShowing((prev) => !prev);
+    const [visible, setVisible] = useState(1);
+    const nextPlease = () =>
+        setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+    const prevPlease = () => setVisible((prev) => (prev === 1 ? 1 : prev - 1));
     return (
         <Wrapper>
-            <button onClick={toggleShowing}>Click</button>
-            {/* AnimatePresence 는 항상 visible 해야함 (그래서 밑에 조건문을 children으로 작성 ) */}
-            {/* AnimatePresence는 안쪽에 나타나거나 사라지는게 있으면 그걸 animate 해줌 */}
-            {/* 일반 react에서는 불가능한걸 AnimatePresence로 가능하게 해주는거 */}
             <AnimatePresence>
-                {showing ? (
-                    <Box
-                        variants={boxVar}
-                        initial="initial"
-                        animate="visible"
-                        exit="leaving"
-                    />
-                ) : null}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
+                    i === visible ? (
+                        <Box
+                            variants={boxVar}
+                            initial="invisible"
+                            animate="visible"
+                            exit="exit"
+                            key={i}
+                        >
+                            {i}
+                        </Box>
+                    ) : null
+                )}
             </AnimatePresence>
+            <button onClick={nextPlease}>next</button>
+            <button onClick={prevPlease}>prev</button>
         </Wrapper>
     );
 };
