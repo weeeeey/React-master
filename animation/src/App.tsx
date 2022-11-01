@@ -25,31 +25,38 @@ const Box = styled(motion.div)`
     font-size: 28px;
 `;
 
-// AnimatePresence
-// AnimatePresence의 단일 자식 key를 변경하여 슬라이드쇼(슬라이더)와 같은 컴포넌트를 쉽게 만들 수 있습니다.
+// custom
+// 각 애니메이션 컴포넌트에 대해 동적 variants를 다르게 적용할 때 사용할 수 있는 사용자 지정 데이터입니다.
 // ```
-// export const Slideshow = ({ image }) => (
-// < AnimatePresence>
-// key={image.src}
-// src={image.src}
-// initial={{ x: 300, opacity: 0 }}
-// animate={{ x: 0, opacity: 1 }}
-// exit={{ x: -300, opacity: 0 }}
-// />
-// < /AnimatePresence>
-// )
-// ```
-// https://www.framer.com/docs/animate-presence/##unmount-animations
+// const variants = {
+// visible: (custom) => ({
+// opacity: 1,
+// transition: { delay: custom * 0.2 }
+// })
+// }
 
-// Slider 예시 코드
-// https://codesandbox.io/s/framer-motion-image-gallery-pqvx3?from-embed
+// < motion.div custom={0} animate="visible" variants={variants} />
+// < motion.div custom={1} animate="visible" variants={variants} />
+// < motion.div custom={2} animate="visible" variants={variants} />
+// ```
+// https://www.framer.com/docs/component/###custom
+
+// exitBeforeEnter
+// true로 설정하면 AnimatePresence는 한 번에 하나의 컴포넌트만 랜더링합니다. exiting중인 컴포넌트는 entering하는 컴포넌트가 렌더링되기 전에 exit 애니메이션을 완료합니다.
+// ```
+// < AnimatePresence exitBeforeEnter>
+// < motion.div key={currentItem} exit={{ opacity: 0 }} />
+// < /AnimatePresence>
+// ```
+// https://www.framer.com/docs/animate-presence/###exitbeforeenter
+
 const boxVar = {
-    invisible: {
-        x: 500,
+    entry: (isBack: boolean) => ({
+        x: isBack ? -500 : 500,
         opacity: 0,
         scale: 0,
-    },
-    visible: {
+    }),
+    center: {
         x: 0,
         opacity: 1,
         scale: 1,
@@ -57,37 +64,40 @@ const boxVar = {
             duration: 1,
         },
     },
-    exit: {
-        x: -500,
+    exit: (isBack: boolean) => ({
+        x: isBack ? 500 : -500,
         opacity: 0,
         scale: 0,
         transition: {
             duration: 1,
         },
-    },
+    }),
 };
 
 const App = () => {
     const [visible, setVisible] = useState(1);
-    const nextPlease = () =>
+    const [back, setBack] = useState(false);
+    const nextPlease = () => {
+        setBack(false);
         setVisible((prev) => (prev === 10 ? 10 : prev + 1));
-    const prevPlease = () => setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+    };
+    const prevPlease = () => {
+        setBack(true);
+        setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+    };
     return (
         <Wrapper>
-            <AnimatePresence>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-                    i === visible ? (
-                        <Box
-                            variants={boxVar}
-                            initial="invisible"
-                            animate="visible"
-                            exit="exit"
-                            key={i}
-                        >
-                            {i}
-                        </Box>
-                    ) : null
-                )}
+            <AnimatePresence custom={back}>
+                <Box
+                    custom={back}
+                    variants={boxVar}
+                    initial="entry"
+                    animate="center"
+                    exit="exit"
+                    key={visible}
+                >
+                    {visible}
+                </Box>
             </AnimatePresence>
             <button onClick={nextPlease}>next</button>
             <button onClick={prevPlease}>prev</button>
