@@ -35,7 +35,7 @@ const Logo = styled(motion.svg)`
     fill: ${(props) => props.theme.red};
     path {
         stroke-width: 6px;
-        stroke: whiter;
+        stroke: white;
     }
 `;
 const Items = styled.ul`
