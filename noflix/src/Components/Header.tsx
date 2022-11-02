@@ -1,9 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useMatch, PathMatch } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useAnimation, useScroll } from "framer-motion";
 
-const Nav = styled.nav`
+// useAnimation()
+// useAnimation 훅을사용하여 시작 및 중지 메서드가 있는 AnimationControls을 만들 수 있습니다.
+// ```
+// const MyComponent = () => {
+// const controls = useAnimation()
+// return < motion.div animate={controls} />
+// }
+
+// // 애니메이션은 controls.start 메소드로 시작할 수 있습니다.
+// controls.start({ x: "100%", transition: { duration: 3 }})
+// ```
+// https://www.framer.com/docs/animation/#component-animation-controls
+
+// useViewportScroll(): ScrollMotionValues
+// viewport가 스크롤될 때 업데이트되는 MotionValues를 반환합니다.
+// 주의! body 또는 html을 height: 100% 또는 이와 유사한 것으로 설정하면 페이지 길이를 정확하게 측정하는 브라우저의 기능이 손상되므로 Progress 값이 손상됩니다.
+// ```
+// export const MyComponent = () => {
+// const { scrollYProgress } = useViewportScroll()
+// return < motion.div style={{ scaleX: scrollYProgress }} />
+// }
+// ```
+// https://www.framer.com/docs/motionvalue/###useviewportscroll
+
+const Nav = styled(motion.nav)`
     display: flex;
     top: 0;
     width: 100%;
@@ -67,19 +91,17 @@ const Search = styled.span`
     position: relative;
 `;
 
-// transform-origin
-// transform-origin CSS 속성은 엘리먼트 transformation의 원점을 설정합니다.
-// ```
-// transform-origin: center;
-// transform-origin: top left;
-// transform-origin: bottom right 60px;
-// ```
-// https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin
-
 const Input = styled(motion.input)`
     transform-origin: right center;
     position: absolute;
-    left: -150px;
+    right: 0px;
+    padding: 5px 10px;
+    padding-left: 40px;
+    z-index: -1;
+    color: white;
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid ${(props) => props.theme.white.lighter};
 `;
 
 const varLogo = {
@@ -94,21 +116,54 @@ const varLogo = {
     },
 };
 
+const varNav = {
+    // 스크롤 내리면 넷바 색깔 검정색
+    top: {
+        backgroundColor: "rgba(0,0,0,0)",
+    },
+    scroll: {
+        backgroundColor: "rgba(0,0,0,1)",
+    },
+};
 const Header = () => {
     const homeMatch: PathMatch<string> | null = useMatch("/");
     const tvMatch: PathMatch<string> | null = useMatch("/tv");
 
     const [searchOpen, setSearchOpen] = useState(false);
+
+    const inputAnimation = useAnimation();
+    const navAnimation = useAnimation();
+    const { scrollY } = useScroll();
+
     const toggleSearch = () => {
+        if (searchOpen) {
+            inputAnimation.start({
+                scaleX: 0,
+            });
+        } else {
+            inputAnimation.start({
+                scaleX: 1,
+            });
+        }
         setSearchOpen((prev) => !prev);
     };
+    useEffect(() => {
+        scrollY.onChange(() => {
+            if (scrollY.get() > 80) {
+                navAnimation.start("scroll");
+            } else {
+                navAnimation.start("top");
+            }
+        });
+    }, [scrollY, navAnimation]);
+
     return (
-        <Nav>
+        <Nav variants={varNav} animate={navAnimation} initial={"top"}>
             <Col>
                 <Logo
                     variants={varLogo}
                     whileHover="active"
-                    initial="normal"
+                    animate="normal"
                     xmlns="http://www.w3.org/2000/svg"
                     width="1024"
                     height="276.742"
@@ -133,7 +188,7 @@ const Header = () => {
                 <Search>
                     <motion.svg
                         onClick={toggleSearch}
-                        animate={{ x: searchOpen ? -180 : 0 }}
+                        animate={{ x: searchOpen ? -200 : 0 }}
                         transition={{ type: "linear" }}
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -147,7 +202,8 @@ const Header = () => {
                     </motion.svg>
                     <Input
                         transition={{ type: "linear" }}
-                        animate={{ scaleX: searchOpen ? 1 : 0 }}
+                        animate={inputAnimation}
+                        initial={{ scaleX: 0 }}
                         placeholder="Search for movie or tv show..."
                     />
                 </Search>
