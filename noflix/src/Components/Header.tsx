@@ -133,6 +133,8 @@ const Header = () => {
 
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
+
+    // useAnimation 으로 언마운트 되는 컴포넌트에 애니메이션 효과 주기
     const { scrollY } = useScroll();
 
     const toggleSearch = () => {
@@ -188,7 +190,7 @@ const Header = () => {
                 <Search>
                     <motion.svg
                         onClick={toggleSearch}
-                        animate={{ x: searchOpen ? -200 : 0 }}
+                        animate={{ x: searchOpen ? -210 : 0 }}
                         transition={{ type: "linear" }}
                         fill="currentColor"
                         viewBox="0 0 20 20"
