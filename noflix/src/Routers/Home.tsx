@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { getMovies, IGetMoviesResult } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -37,7 +38,9 @@ const Home = () => {
         ["movies", "nowPlaying"],
         getMovies
     );
-    console.log(data, isLoading);
+    useEffect(() => {
+        console.log(data, isLoading);
+    }, [data, isLoading]);
     return (
         <Wrapper>
             {isLoading ? (
