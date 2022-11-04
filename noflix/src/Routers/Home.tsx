@@ -67,6 +67,18 @@ const varRow = {
     exit: { x: -window.outerWidth - 5 },
 };
 
+const varBox = {
+    hover: {
+        scale: 1.3,
+        y: -50,
+        transition: {
+            delay: 0.5,
+            duration: 0.3,
+            type: "tween",
+        },
+    },
+};
+
 const offset = 6;
 const Home = () => {
     const { data, isLoading } = useQuery<IGetMoviesResult>(
@@ -87,7 +99,6 @@ const Home = () => {
             setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
         }
     };
-    console.log(data);
     return (
         <Wrapper>
             {isLoading ? (
@@ -118,8 +129,6 @@ const Home = () => {
                                 transition={{ type: "tween", duration: 0.5 }}
                                 key={index}
                             >
-                                {/* obj.slice(num) num갯수를 뺀 객체 반환 */}
-                                {/* obj.slice(s,e) 인덱스s부터 인덱스e 이전까지 반환 */}
                                 {data?.results
                                     .slice(1)
                                     .slice(
@@ -133,6 +142,10 @@ const Home = () => {
                                                 movie.poster_path,
                                                 "w500"
                                             )}
+                                            transition={{ type: "tween" }}
+                                            variants={varBox}
+                                            initial={{ scale: 1 }}
+                                            whileHover="hover"
                                         />
                                     ))}
                             </Row>
