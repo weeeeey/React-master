@@ -127,7 +127,32 @@ const BigMovie = styled(motion.div)`
     left: 0;
     right: 0;
     margin: 0 auto;
+
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: ${(props) => props.theme.black.lighter};
 `;
+
+const BigCover = styled.div`
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    height: 400px;
+`;
+const BigTitle = styled.h3`
+    color: ${(props) => props.theme.white.lighter};
+    padding: 20px;
+    font-size: 46px;
+    position: relative;
+    top: -80px;
+`;
+const BigOverview = styled.p`
+    padding: 20px;
+    position: relative;
+    top: -80px;
+    color: ${(props) => props.theme.white.lighter};
+`;
+
 const offset = 6;
 
 const Home = () => {
@@ -164,7 +189,11 @@ const Home = () => {
     const onOverlayClicked = () => {
         history(`/`);
     };
-    console.log(data);
+    const clieckMovie =
+        bigMovieMatch?.params.movieId &&
+        data?.results.find(
+            (movie) => movie.id === +bigMovieMatch.params.movieId!
+        );
     return (
         <Wrapper>
             {isLoading ? (
@@ -236,10 +265,30 @@ const Home = () => {
                                     animate={{ opacity: 1 }}
                                 >
                                     <BigMovie
-                                        style={{ top: scrollY.get() + 100 }}
+                                        // style top에 스크롤 계산 안하면 고정되어있어짐
+                                        style={{
+                                            top: scrollY.get() + 100,
+                                        }}
                                         layoutId={bigMovieMatch.params.moviedId}
                                     >
-                                        hello
+                                        {clieckMovie && (
+                                            <>
+                                                <BigCover
+                                                    style={{
+                                                        backgroundImage: `linear-gradient(to top, black,transparent),url(${makeImagePath(
+                                                            clieckMovie.backdrop_path,
+                                                            "w500"
+                                                        )})`,
+                                                    }}
+                                                />
+                                                <BigTitle>
+                                                    {clieckMovie.title}
+                                                </BigTitle>
+                                                <BigOverview>
+                                                    {clieckMovie.overview}
+                                                </BigOverview>
+                                            </>
+                                        )}
                                     </BigMovie>
                                 </Overlay>
                             </>
