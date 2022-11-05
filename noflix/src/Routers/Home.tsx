@@ -3,8 +3,9 @@ import { getMovies, IGetMoviesResult } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { useState } from "react";
+import { useNavigate, useMatch, PathMatch } from "react-router-dom";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -58,6 +59,7 @@ const varRow = {
 };
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
+    cursor: pointer;
     background-color: white;
     height: 200px;
     color: red;
@@ -108,8 +110,36 @@ const varInfo = {
         },
     },
 };
+
+const Overlay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+`;
+
+const BigMovie = styled(motion.div)`
+    position: absolute;
+    width: 40vw;
+    height: 80vh;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+`;
 const offset = 6;
+
 const Home = () => {
+    const history = useNavigate();
+    const bigMovieMatch: PathMatch<string> | null =
+        useMatch("/movies/:movieId");
+    console.log(bigMovieMatch);
+    // history에 인자를 넘겨주면 내 주소값을 그것으로 바꿔줌
+    // 그럼 bigMovieMatch (useMatch)를 통해 그걸 따옴
+    // (내가 클릭하고 있는 영화를 알수있게 해줌) ->
+    // 내가 설정한 URL과 매치 되면 bigMovieMatch에 값이 생김
+    const { scrollY } = useScroll();
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["movies", "nowPlaying"],
         getMovies
@@ -128,6 +158,13 @@ const Home = () => {
             setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
         }
     };
+    const onBoxClicked = (movieId: number) => {
+        history(`/movies/${movieId}`);
+    };
+    const onOverlayClicked = () => {
+        history(`/`);
+    };
+    console.log(data);
     return (
         <Wrapper>
             {isLoading ? (
@@ -166,6 +203,10 @@ const Home = () => {
                                     )
                                     .map((movie) => (
                                         <Box
+                                            layoutId={movie.id + ""}
+                                            onClick={() =>
+                                                onBoxClicked(movie.id)
+                                            }
                                             key={movie.id}
                                             bgphoto={makeImagePath(
                                                 movie.poster_path,
@@ -186,6 +227,24 @@ const Home = () => {
                             </Row>
                         </AnimatePresence>
                     </Slider>
+                    <AnimatePresence>
+                        {bigMovieMatch ? (
+                            <>
+                                <Overlay
+                                    onClick={onOverlayClicked}
+                                    exit={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                >
+                                    <BigMovie
+                                        style={{ top: scrollY.get() + 100 }}
+                                        layoutId={bigMovieMatch.params.moviedId}
+                                    >
+                                        hello
+                                    </BigMovie>
+                                </Overlay>
+                            </>
+                        ) : null}
+                    </AnimatePresence>
                 </>
             )}
         </Wrapper>
