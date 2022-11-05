@@ -138,6 +138,7 @@ const BigCover = styled.div`
     background-size: cover;
     background-position: center center;
     height: 400px;
+    align-items: center;
 `;
 const BigTitle = styled.h3`
     color: ${(props) => props.theme.white.lighter};
@@ -159,7 +160,6 @@ const Home = () => {
     const history = useNavigate();
     const bigMovieMatch: PathMatch<string> | null =
         useMatch("/movies/:movieId");
-    console.log(bigMovieMatch);
     // history에 인자를 넘겨주면 내 주소값을 그것으로 바꿔줌
     // 그럼 bigMovieMatch (useMatch)를 통해 그걸 따옴
     // (내가 클릭하고 있는 영화를 알수있게 해줌) ->

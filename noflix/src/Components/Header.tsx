@@ -1,32 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useMatch, PathMatch } from "react-router-dom";
+import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { motion, useAnimation, useScroll } from "framer-motion";
 
-// useAnimation()
-// useAnimation 훅을사용하여 시작 및 중지 메서드가 있는 AnimationControls을 만들 수 있습니다.
-// ```
-// const MyComponent = () => {
-// const controls = useAnimation()
-// return < motion.div animate={controls} />
-// }
-
-// // 애니메이션은 controls.start 메소드로 시작할 수 있습니다.
-// controls.start({ x: "100%", transition: { duration: 3 }})
-// ```
-// https://www.framer.com/docs/animation/#component-animation-controls
-
-// useViewportScroll(): ScrollMotionValues
-// viewport가 스크롤될 때 업데이트되는 MotionValues를 반환합니다.
-// 주의! body 또는 html을 height: 100% 또는 이와 유사한 것으로 설정하면 페이지 길이를 정확하게 측정하는 브라우저의 기능이 손상되므로 Progress 값이 손상됩니다.
-// ```
-// export const MyComponent = () => {
-// const { scrollYProgress } = useViewportScroll()
-// return < motion.div style={{ scaleX: scrollYProgress }} />
-// }
-// ```
-// https://www.framer.com/docs/motionvalue/###useviewportscroll
-
+import { useForm } from "react-hook-form";
 const Nav = styled(motion.nav)`
     display: flex;
     top: 0;
@@ -81,7 +58,7 @@ const Item = styled.li`
     flex-direction: column;
 `;
 
-const Search = styled.span`
+const Search = styled.form`
     display: flex;
     color: white;
     svg {
@@ -125,7 +102,17 @@ const varNav = {
         backgroundColor: "rgba(0,0,0,1)",
     },
 };
+
+interface IForm {
+    keyword: string;
+}
 const Header = () => {
+    const history = useNavigate();
+    const { register, handleSubmit } = useForm<IForm>();
+    const onValid = (data: IForm) => {
+        history(`/search?keyword=${data.keyword}`);
+    };
+
     const homeMatch: PathMatch<string> | null = useMatch("/");
     const tvMatch: PathMatch<string> | null = useMatch("/tv");
 
@@ -187,7 +174,7 @@ const Header = () => {
                 </Items>
             </Col>
             <Col>
-                <Search>
+                <Search onSubmit={handleSubmit(onValid)}>
                     <motion.svg
                         onClick={toggleSearch}
                         animate={{ x: searchOpen ? -210 : 0 }}
@@ -203,6 +190,10 @@ const Header = () => {
                         ></path>
                     </motion.svg>
                     <Input
+                        {...register("keyword", {
+                            required: true,
+                            minLength: 2,
+                        })}
                         transition={{ type: "linear" }}
                         animate={inputAnimation}
                         initial={{ scaleX: 0 }}
