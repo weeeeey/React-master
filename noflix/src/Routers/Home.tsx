@@ -5,7 +5,7 @@ import { makeImagePath } from "../utils";
 import { useState } from "react";
 import { useNavigate, useMatch, PathMatch } from "react-router-dom";
 
-import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -44,10 +44,10 @@ const Slider = styled.div`
 
 const Row = styled(motion.div)`
     display: grid;
-    gap: 5px;
     grid-template-columns: repeat(6, 1fr);
     position: absolute;
     width: 100%;
+    gap: 10px;
 `;
 
 const varRow = {
@@ -61,12 +61,14 @@ const varRow = {
 const Box = styled(motion.div)<{ bgphoto: string }>`
     cursor: pointer;
     background-color: white;
-    height: 200px;
+    height: 250px;
+    width: 180px;
     color: red;
     font-size: 66px;
     background-image: url(${(props) => props.bgphoto});
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     &:first-child {
         transform-origin: center left;
     }
@@ -92,7 +94,7 @@ const Info = styled(motion.div)`
     background-color: ${(props) => props.theme.black.lighter};
     opacity: 0;
     position: absolute;
-    width: 100%;
+    width: 50%;
     bottom: 0;
     h4 {
         text-align: center;
@@ -121,7 +123,7 @@ const Overlay = styled(motion.div)`
 `;
 
 const BigMovie = styled(motion.div)`
-    position: absolute;
+    position: relative;
     width: 40vw;
     height: 80vh;
     left: 0;
@@ -133,7 +135,7 @@ const BigMovie = styled(motion.div)`
     background-color: ${(props) => props.theme.black.lighter};
 `;
 
-const BigCover = styled.div`
+const BigCover = styled(motion.div)`
     width: 100%;
     background-size: cover;
     background-position: center center;
@@ -155,18 +157,14 @@ const BigOverview = styled.p`
 `;
 
 const offset = 6;
-
 const Home = () => {
     const history = useNavigate();
     const bigMovieMatch: PathMatch<string> | null =
         useMatch("/movies/:movieId");
-    // history에 인자를 넘겨주면 내 주소값을 그것으로 바꿔줌
-    // 그럼 bigMovieMatch (useMatch)를 통해 그걸 따옴
     // (내가 클릭하고 있는 영화를 알수있게 해줌) ->
     // 내가 설정한 URL과 매치 되면 bigMovieMatch에 값이 생김
-    const { scrollY } = useScroll();
     const { data, isLoading } = useQuery<IGetMoviesResult>(
-        ["movies", "nowPlaying"],
+        ["movies", "now_playing"],
         getMovies
     );
     const [index, setIndex] = useState(0);
@@ -221,7 +219,10 @@ const Home = () => {
                                 initial="hidden"
                                 animate="visible"
                                 exit="exit"
-                                transition={{ type: "tween", duration: 0.5 }}
+                                transition={{
+                                    type: "tween",
+                                    duration: 0.5,
+                                }}
                                 key={index}
                             >
                                 {data?.results
@@ -247,7 +248,7 @@ const Home = () => {
                                             whileHover="hover"
                                         >
                                             {/* 부모 컴포넌트 variants에는 hover가 있으므로 자식에게도
-                                            자동으로 whilehover="hover"가 적용됨 */}
+                                                자동으로 whilehover="hover"가 적용됨 */}
                                             <Info variants={varInfo}>
                                                 <h4>{movie.title}</h4>
                                             </Info>
@@ -255,7 +256,9 @@ const Home = () => {
                                     ))}
                             </Row>
                         </AnimatePresence>
+                        <button style={{ fontSize: "50px" }}>asd</button>
                     </Slider>
+
                     <AnimatePresence>
                         {bigMovieMatch ? (
                             <>
@@ -267,7 +270,7 @@ const Home = () => {
                                     <BigMovie
                                         // style top에 스크롤 계산 안하면 고정되어있어짐
                                         style={{
-                                            top: scrollY.get() + 100,
+                                            top: "64px",
                                         }}
                                         layoutId={bigMovieMatch.params.moviedId}
                                     >
@@ -276,8 +279,7 @@ const Home = () => {
                                                 <BigCover
                                                     style={{
                                                         backgroundImage: `linear-gradient(to top, black,transparent),url(${makeImagePath(
-                                                            clieckMovie.backdrop_path,
-                                                            "w500"
+                                                            clieckMovie.backdrop_path
                                                         )})`,
                                                     }}
                                                 />
